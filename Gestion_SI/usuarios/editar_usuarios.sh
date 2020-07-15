@@ -9,6 +9,7 @@ do
 	echo "|1- Cambiar nombre de usuario					|"
 	echo "|2- Cambiar id de usuario					|"
 	echo "|3- Cambiar contraseña de usuario				|"
+	echo "|4- Eliminar usuario de grupo(s)				|"
 	echo "|0- Volver							|"
 	echo "----------------------------------------------------------------"
 	read -p ">" opcion3
@@ -22,6 +23,9 @@ do
 			;;
 		3)
 			cambiar_contrasena_usuario
+			;;
+		4)
+			eliminar_usuario_de_grupo
 			;;
 		0)
 			clear

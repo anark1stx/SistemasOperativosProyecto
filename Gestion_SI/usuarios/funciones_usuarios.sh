@@ -69,7 +69,7 @@ cambiar_contrasena_usuario(){
 eliminar_usuario_de_grupo(){
 	read -p "Ingrese el usuario que desea eliminar de determinados grupos: " _user
 	echo "Grupos actuales de: $(groups $_user)"
-	read -a "Ingrese el/los nombre(s) del(os) grupo(s) del(os) que desea eliminar a $_user: " _grupos_sacar
+	read -p "Ingrese el/los nombre(s) del(os) grupo(s) del(os) que desea eliminar a $_user: " -a _grupos_sacar
 	
 	grupos_con_coma="" #inicializamos la variable que va a tener los grupos separados por coma.
 	
