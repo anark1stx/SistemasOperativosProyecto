@@ -1,14 +1,14 @@
-#!/bin/bash -
+#!/bin/bash
 
 ingresar_usuario(){ #esta funcion cumple tanto el rol de agregar nuevos usuarios como el de agregarlo a grupos.
 	read -p "Ingrese nombre de usuario: " _user
 	echo "Si desea agregar al usuario "$_user" a uno o más grupos, ingrese los grupos separados por espacio a continuación, caso contrario, deje vacío: "
 	read -p "Grupos a agregar: " -a _grupos #-a lee una lista o array.
 	
-	if [ "${#_grupos[@]}" -lt 1 ]; then #Si la cantidad de grupos es menor que 1, ingresamos el usuario solo.
+	if [ "${#_grupos[@]}" -lt 1 ]; then #Si la cantidad de grupos es menor que 1, se ingresa el usuario solo.
 		useradd $_user
 	else #Si la cantidad de grupos es 1 o más:
-		grupos_con_coma="" #inicializamos la variable que va a tener los grupos separados por coma.
+		grupos_con_coma="" #Inicializar la variable que va a tener los grupos separados por coma.
 	
 		for grupo in $_grupos
 		do
@@ -21,9 +21,6 @@ ingresar_usuario(){ #esta funcion cumple tanto el rol de agregar nuevos usuarios
 		
 		useradd -G $grupos_con_coma $_user #finalmente añadimos al usuario a los grupos.
 	fi
-
-	#source: https://www.computerhope.com/unix/bash/shift.htm
-	#source: https://bytefreaks.net/gnulinux/bash/remove-the-first-character-from-a-bash-variable	
 }
 
 
@@ -71,7 +68,7 @@ eliminar_usuario_de_grupo(){
 	echo "Grupos actuales de: $(groups $_user)"
 	read -p "Ingrese el/los nombre(s) del(os) grupo(s) del(os) que desea eliminar a $_user: " -a _grupos_sacar
 	
-	grupos_con_coma="" #inicializamos la variable que va a tener los grupos separados por coma.
+	grupos_con_coma="" #Se inicializa la variable que va a tener los grupos separados por coma.
 	
 	for grupo in $_grupos_sacar
 	do
