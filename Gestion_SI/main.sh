@@ -5,7 +5,7 @@ clear
 while [ $opcion -ne 0  ] #inicio estructura WHILE
 do
 	echo "----------------------------------------------------------------"
-	echo "|		Menú de Gestion 			        |"
+	echo "|		Menú de Gestión 			        |"
 	echo "|								|"
 	echo "|1- Gestionar usuarios						|"
 	echo "|2- Gestionar grupos						|"
