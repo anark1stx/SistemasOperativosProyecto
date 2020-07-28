@@ -1,46 +1,42 @@
-#!/bin/bash - 
-#con esto le indicamos a bash que tiene que ejecutar las funciones que están en ese archivo.
+#!/bin/bash
 . usuarios/funciones_usuarios.sh
 
-opcion2=99
-while [ $opcion2 -ne 0 ] #inicio estructura while
+opcion2="99"
+while [[ "$opcion2" != "0" ]]
 do
 	echo "----------------------------------------------------------------"
 	echo "|		Menu de Gestion de Usuarios		        |"
 	echo "|								|"
 	echo "|1- Crear un usuario						|"
-	echo "|2- Editar un usuario						|"
+	echo "|2- Editar un usuario						|" #editar un usuario da la opcion de agregar un usuario a grupos
 	echo "|3- Eliminar un usuario						|"
 	echo "|0- Volver							|"
 	echo "----------------------------------------------------------------"
 	read -p ">" opcion2
 
-	case $opcion2 in 
-		1)
-			ingresar_usuario #llamamos a la funcion ingresar usuario
+	case "$opcion2" in 
+		"1")
+			ingresar_usuario 
 			;;
 
-		2)
+		"2")
 			clear
-			./usuarios/editar_usuarios.sh #script que contiene otro menu en el que se puede, sacar de grupos,
-			              		      #añadir a grupos, cambiar uid, cambiar nombre de usuario
+			./usuarios/editar_usuarios.sh
+			              		     
 			;;
 
-		3)
+		"3")
 			eliminar_usuario
 			;;
-		0)
+		"0")
 			clear
-			opcion2=0
+			opcion2="0"
 			;;
 		*)
 			clear
-			echo "Opcion inválida"
+			echo "Opcion invalida"
 			;;
 
-	esac #final estructura case
+	esac 
 
-done #final estructura while
-
-
-
+done 

@@ -1,9 +1,9 @@
-#!/bin/bash - 
-#con esto le indicamos a bash que tiene que ejecutar las funciones que están en ese archivo.
+#!/bin/bash 
 . grupos/funciones_grupos.sh
 
-opcion2=99
-while [ $opcion2 -ne 0 ] #inicio estructura while
+opcion2="99"
+while [ "$opcion2" != "0" ] 
+
 do
 	echo "----------------------------------------------------------------"
 	echo "|		Menu de Gestion de Grupos		        |"
@@ -15,31 +15,31 @@ do
 	echo "----------------------------------------------------------------"
 	read -p ">" opcion2
 
-	case $opcion2 in 
-		1)
-			ingresar_grupo #llamamos a la funcion ingresar usuario
+	case "$opcion2" in 
+		"1")
+			ingresar_grupo 
 			;;
 
-		2)
+		"2")
 			clear
-			./grupos/editar_grupos.sh #script para cambiar parametros de los grupos
+			./grupos/editar_grupos.sh 
 			;;
 
-		3)
+		"3")
 			eliminar_grupo
 			;;
-		0)
+		"0")
 			clear
 			opcion2=0
 			;;
 		*)
 			clear
-			echo "Opcion inválida"
+			echo "Opcion invalida"
 			;;
 
-	esac #final estructura case
+	esac 
 
-done #final estructura while
+done 
 
 
 

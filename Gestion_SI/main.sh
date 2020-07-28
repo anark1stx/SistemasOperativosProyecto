@@ -1,8 +1,8 @@
-#!/bin/bash - 
+#!/bin/bash 
 
-opcion=99
+opcion="99"
 clear
-while [ $opcion -ne 0  ] #inicio estructura WHILE
+while [ "$opcion" != "0"  ] 
 do
 	echo "----------------------------------------------------------------"
 	echo "|		Menu de Gestion 			        |"
@@ -13,23 +13,25 @@ do
 	echo "----------------------------------------------------------------"
 	read -p "> " opcion
 
-	case $opcion in #inicio estructura CASE
-		1)
+	case "$opcion" in 
+		"1")
 			clear
 			./usuarios/gestion_usuarios.sh
 			;;
 
-		2)
+		"2")
 			clear
 			./grupos/gestion_grupos.sh
 			;;
-		0)
-			opcion=0
+		"0")
+			opcion="0"
 			;;
 
-		*)	echo "Opción inválida"
+		*)	
+			clear
+			echo "Opcion invalida"
 			;;
-	esac #final estructura CASE
+	esac
 
-done #final estructura WHILE
+done
 

@@ -1,25 +1,65 @@
 #!/bin/bash
 
-ingresar_usuario(){ #esta funcion cumple tanto el rol de agregar nuevos usuarios como el de agregarlo a grupos.
+ingresar_usuario(){ #Cumple la funcion de añadir nuevo usuario + agregarlo a grupos.(alta + modificacion) 
 	read -p "Ingrese nombre de usuario: " _user
-	echo "Si desea agregar al usuario "$_user" a uno o más grupos, ingrese los grupos separados por espacio a continuación, caso contrario, deje vacío: "
-	read -p "Grupos a agregar: " -a _grupos #-a lee una lista o array.
+	usr_existe=$(cat /etc/passwd | grep $_user | wc -l)
+	if [ $usr_existe -eq 1 ]; then
+	clear
+	echo "El usuario $_user ya existe."
+	return 1
+	fi
+
+	echo "Si desea agregar al usuario "$_user" a uno o mas grupos, ingrese los grupos separados por coma a continuacion, caso contrario, deje vacío: "
+	echo ""
+	read -p "Grupos a agregar: " _grupos
+
+	grupos_con_coma="" 
+	grupos_que_no_existen=""
 	
-	if [ "${#_grupos[@]}" -lt 1 ]; then #Si la cantidad de grupos es menor que 1, se ingresa el usuario solo.
+	if [ $(echo $_grupos | tr ',' ' '| wc -w) -lt 1 ]; then 
 		useradd $_user
-	else #Si la cantidad de grupos es 1 o más:
-		grupos_con_coma="" #Inicializar la variable que va a tener los grupos separados por coma.
-	
+	else
+		_grupos="$(echo "$_grupos" | tr -d ' ')" #remover espacios
+		IFS="," #indicar delimitador
 		for grupo in $_grupos
 		do
-			grupos_con_coma+=",$grupo" #guardar los grupos separados por coma
+			grupo_existe=$(grep "$grupo" /etc/group | wc -l)
+			if [ $grupo_existe -eq 0 ]; then
+				grupos_que_no_existen+=",$grupo"
+			else
+				grupos_con_coma+=",$grupo"
+			fi	
 		done
 
-		grupos_con_coma=${grupos_con_coma#","} 
-		#esto lo unico que hace es remover la primera coma del string
-		#sino saldria: ,grupo1,grupo2,grupo3
+		grupos_con_coma=${grupos_con_coma#","}
+		grupos_con_coma=${grupos_con_coma%","}
+		grupos_que_no_existen=${grupos_que_no_existen#","}
+		grupos_que_no_existen=${grupos_que_no_existen%","}
+
+		if [ ${#grupos_que_no_existen} -gt 0 ]; then
+
+		read -p "los grupos: $grupos_que_no_existen, no existen, desea crearlos? (s/n)" _crear
 		
-		useradd -G $grupos_con_coma $_user #finalmente añadimos al usuario a los grupos.
+		case "$_crear" in
+			s)
+				grupos_que_no_existen="$(echo "$_grupos_que_no_existen" | tr -d ' ')" #remover espacios
+				. grupos/funciones_grupos.sh
+				ingresar_grupo "$grupos_que_no_existen"
+				grupos_con_coma+=",$grupos_que_no_existen"
+				;;
+
+			n)
+				;;
+			*)
+				echo "Seleccione solamente "s" o "n" "
+		esac
+
+		fi
+		grupos_con_coma="$(echo "$grupos_con_coma" | tr -d ' ')" #remover espacios	
+		grupos_con_coma=${grupos_con_coma%","}
+
+		useradd $_user
+		usermod -a -G "$grupos_con_coma" "$_user"
 	fi
 }
 
@@ -53,8 +93,8 @@ cambiar_uid(){
 cambiar_nombre_usuario(){
 	read -p "Ingrese el nombre del usuario que desea cambiar: " _user
 	read -p "Ingrese el nuevo nombre para el usuario $_user: " _userNuevo
-	mv /home/$_user /home/$_userNuevo #cambiar el nombre del directorio home
-	usermod -l $_userNuevo $_user #esto es para cambiar el nombre del usuario
+	mv /home/$_user /home/$_userNuevo 
+	usermod -l $_userNuevo $_user 
 	
 }
 
@@ -66,16 +106,32 @@ cambiar_contrasena_usuario(){
 eliminar_usuario_de_grupo(){
 	read -p "Ingrese el usuario que desea eliminar de determinados grupos: " _user
 	echo "Grupos actuales de: $(groups $_user)"
-	read -p "Ingrese el/los nombre(s) del(os) grupo(s) del(os) que desea eliminar a $_user: " -a _grupos_sacar
+	read -p "Ingrese el/los nombre(s) del(os) grupo(s) del(os) que desea eliminar a $_user separados por coma: " _grupos_sacar
 	
-	grupos_con_coma="" #Se inicializa la variable que va a tener los grupos separados por coma.
-	
+	grupos_con_coma="" 
+	IFS=","	
 	for grupo in $_grupos_sacar
 	do
-		grupos_con_coma+=",$grupo" #guardar los grupos separados por coma
+		grupo_existe=$(grep "$grupo" /etc/group | wc -l)
+		if [ $grupo_existe -eq 1 ]; then
+			usuario_en_grupo=$(grep "$grupo" /etc/group | grep "$_user" | wc -l )
+			if [ $usuario_en_grupo -eq 0 ]; then
+				echo "El usuario $_user no pertence al grupo $grupo"
+			else
+				grupos_con_coma+=",$grupo"
+			fi
+		else
+			echo "El grupo $grupo no existe"
+		fi	
 	done
 
-	grupos_con_coma=${grupos_con_coma#","}
+	grupos_con_coma=${grupos_con_coma#","}	
+	grupos_con_coma=${grupos_con_coma%","}
+	grupos_con_coma="$(echo "$grupos_con_coma" | tr -d ' ')" #remover espacios	
+	IFS=","
+	for g in $grupos_con_coma
+	do
+		gpasswd -d "$_user" "$g"
+	done
 
-	gpasswd -d $_user $grupos_con_coma
 }

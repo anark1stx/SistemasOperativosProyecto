@@ -1,8 +1,17 @@
-#!/bin/bash -
+#!/bin/bash
 
 ingresar_grupo(){ 
-	read -p "Ingrese el nombre del grupo que desea añadir:" _grupo
-	groupadd $_grupo
+	
+	if [ $# -eq 0 ]; then
+	
+		read -p "Ingrese el nombre del grupo que desea anadir:" _grupo
+		groupadd $_grupo
+	else
+		for g in $1
+		do
+			groupadd $g
+		done
+	fi
 }
 
 
@@ -13,7 +22,7 @@ eliminar_grupo(){
 	case "$opt" in
 		s)
 			groupdel $_grupo
-			echo "El grupo $_grupo eliminado con éxito."
+			echo "El grupo $_grupo fue eliminado con exito."
 			;;
 
 		n)
