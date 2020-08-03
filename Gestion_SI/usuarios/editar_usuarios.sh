@@ -19,7 +19,7 @@ do
 			cambiar_nombre_usuario
 			;;
 		"2")
-			cambiar_id_usuario
+			cambiar_uid
 			;;
 		"3")
 			cambiar_contrasena_usuario
