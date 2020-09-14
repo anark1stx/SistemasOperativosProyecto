@@ -1,0 +1,15 @@
+@	IN	SOA	dns1.overclode.sibim. root.overclode.sibim.	(
+			1001	;Serial
+			3H	;Refresh
+			15M	;Retry
+			1W	;Expire
+			1D	;Minium TTL
+)
+;Name Server Information
+@	IN	NS	dns1.overclode.sibim.
+;PTR Record IP address to Hostname
+8	IN	PTR	dns1.overclode.sibim.	; Pointer 192.168.0.253 to dns1.overclode.sibim 
+9	IN	PTR	dhcp.overclode.sibim.	; Pointer 192.168.0.254 to dhcp.overclode.sibim 
+10	IN	PTR	archivos.overclode.sibim.	; Pointer 192.168.0.252 to archivos.overclode.sibim
+11	IN	PTR	respaldo.overclode.sibim.	; Pointer 192.168.0.250 to respaldo.overclode.sibim
+12	IN	PTR	mail.overclode.sibim.	; Pointer 192.168.0.251 to mail.overclode.sibim
