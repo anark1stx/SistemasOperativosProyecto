@@ -5,7 +5,7 @@ clear
 while [ "$opciont" != "0"  ] 
 do
 	echo "----------------------------------------------------------------"
-	echo "|		Menu de Gestion SIBIM 			        |"
+	echo "|		Menu de Automatizacion (REDES) 			        |"
 	echo "|								|"
 	echo "|1- Configurar como servidor DNS					|"
 	echo "|2- Configurar como servidor DHCP						|"
