@@ -1,18 +1,18 @@
-@	IN	SOA	dns1.overclode.sibim	root.overclode.sibim.	(
-			1001	;Serial
-			3H	;Refresh
-			15M	;Retry
-			1W	;Exprie
-			1D	;Minimum TTL
-)
-;Name Server Information
-@	IN	NS	dns1.overclode.sibim.	; NS : Name Server
-;A - Record Hostname to IP Address
-dns1	IN	A	192.168.0.253	; A - A Record ( DNS Server )
-dhcp	IN	A	192.168.0.254	; A - A Record ( DHCP Server )
-archivos	IN	A	192.168.0.252	; A - A Record ( MAIN Server )
-respaldo	IN	A	192.168.0.250	; A - A Record ( BACKUP Server )
-mail	IN	A	192.168.0.251	; A - A Record ( Mail Server )
-;Mail Exchanger
-overclode.sibim.	IN	MX	10	mail.overclode.sibim.	; MX - Mail for Exchange
-;CNAME	record
+$TTL 1D
+@	IN SOA ns1.overclode.sibim.	root.overclode.sibim. (
+
+			1	;serial
+			1H	;refresh
+			1H	;retry
+			1W	;expire
+			3H )	;minimun
+
+localhost		IN	A	127.0.0.1
+overclode.sibim.	IN	NS	ns1.overclode.sibim.
+overclode.sibim.	IN	MX	10 mail.overclode.sibim.
+ns1			IN	A	192.168.0.253
+archivos		IN	A	192.168.0.252
+respaldo		IN	A	192.168.0.250
+mail			IN	A	192.168.0.251
+www			IN	A	192.168.0.249
+pc-prueba		IN	A	192.168.0.101
