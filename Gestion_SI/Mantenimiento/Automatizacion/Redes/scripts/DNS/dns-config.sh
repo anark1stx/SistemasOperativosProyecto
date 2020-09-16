@@ -36,7 +36,18 @@ ifdown $interfaz
 ifup $interfaz
 systemctl restart network
 
+#VERIFICAR SI TENGO INTERNET
+test_conn=$(ping -c1 8.8.8.8 | grep "100% packet loss")
+if [[ -z "$test_conn" ]]; then
+	echo "Red configurada con exito."
+else
+	echo "Hubieron errores configurando la red. Verifique que el servidor DNS haya sido configurado y esté encendido."
+	exit
+fi
+
+
 echo "Limpiando cache..."; yum clean all &>/dev/null #borrar cache paquetes y demas para evitar conflictos
+echo "Instalando FirewallD..."; yum install -q -y bind* &>/dev/null
 echo "Instalando BIND..."; yum install -q -y bind* &>/dev/null #instalar librerias de BIND
 
 #cambiar hostname
@@ -50,17 +61,25 @@ echo "OPTIONS=-"4"" >> /etc/sysconfig/named #para indicar que estamos usando IPv
 
 systemctl start named
 systemctl enable named
+systemctl start firewalld
+systemctl enable firewalld
 firewall-cmd --zone=public --add-port=53/tcp --permanent
 
 named_status=$(systemctl show -p ActiveState named | cut -d "=" -f2)
 
 if [ $named_status = "active" ]; then
-	echo "Configurado con éxito."
+	echo "Configurado BIND DNS con éxito."
 else
 	echo "Hubieron errores configurando el servicio DNS."
+	exit
 fi
 
-
+firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
+if [ $firewalld_status = "active" ]; then
+	echo "Agregada regla al firewall para el tráfico de datos del DNS."
+else
+	echo "Hubieron errores configurando el firewall."
+fi
 
 
 
