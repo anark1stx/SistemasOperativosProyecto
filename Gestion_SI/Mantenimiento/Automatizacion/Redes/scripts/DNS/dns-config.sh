@@ -26,8 +26,6 @@ ifup $interfaz
 #reinicio servicio
 systemctl restart network
 
-setenforce 0 #deshabilitar SELinux
-systemctl stop firewalld # parar firewalld para facilitar el proceso
 
 sed -i "/DEVICE=/c DEVICE=\"$interfaz\"" $mi_interfaz
 sed -i "/NAME=/c NAME=\"$interfaz\"" $mi_interfaz
@@ -52,6 +50,8 @@ echo "OPTIONS=-"4"" >> /etc/sysconfig/named #para indicar que estamos usando IPv
 
 systemctl start named
 systemctl enable named
+firewall-cmd --zone=public --add-port=53/tcp --permanent
+
 named_status=$(systemctl show -p ActiveState named | cut -d "=" -f2)
 
 if [ $named_status = "active" ]; then
