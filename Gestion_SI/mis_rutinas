@@ -1,0 +1,44 @@
+#backup_home.sh
+0 0 1 * * /var/scripts_cron/backup_home.sh
+
+#backup_etc.sh
+0 0 1 * * /var/scripts_cron/backup_etc.sh
+
+#backup_var.sh
+0 0 1 * * /var/scripts_cron/backup_var.sh
+
+#backup_mysql.sh
+0 0 1 * * /var/scripts_cron/backup_mysql.sh
+
+#backup_sibim.sh
+0 0 1 * * /var/scripts_cron/backup_sibim.sh
+
+#backup_etc_passwd.sh cada 7 dias los domingos a las 00:00
+0 0 * * 0 /var/scripts_cron/backup_etc_passwd.sh
+
+#backup_etc_shadow.sh
+0 0 * * 0 /var/scripts_cron/backup_etc_shadow.sh
+
+#backup_etc_sudoers.sh el dia 15 de cada mes a las 00:00
+0 0 15 * * /var/scripts_cron/backup_etc_sudoers.sh
+
+#backup_mysql_user.sh cada 12 horas
+0 */12 * * * /var/scripts_cron/backup_mysql_user.sh
+
+#backup_sibim_usuarios.sh cada 12 horas
+0 */12 * * * /var/scripts_cron/backup_sibim_usuarios.sh
+
+#backup_sibim_analisis.sh
+0 0 * * 0 /var/scripts_cron/backup_sibim_analisis.sh
+
+#backup_sibim_tratamiento.sh
+0 0 * * 0 /var/scripts_cron/backup_sibim_tratamiento.sh
+
+#backup_sibim_diagnostico.sh
+0 0 * * 0 /var/scripts_cron/backup_sibim_diagnostico.sh
+
+#backup_sibim_formulario.sh
+0 0 * * 0 /var/scripts_cron/backup_sibim_formulario.sh
+
+#borrar_backups
+0 20 * * * /var/scripts/cron/borrar_backups.sh

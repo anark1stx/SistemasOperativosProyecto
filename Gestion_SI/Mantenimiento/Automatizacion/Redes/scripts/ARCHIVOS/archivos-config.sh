@@ -79,3 +79,6 @@ fi
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
+cp -R Mantenimiento/Automatizacion/scripts_cron /var/scripts_cron
+cp mis_rutinas /var/mis_rutinas
+crontab /var/mis_rutinas
