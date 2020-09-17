@@ -1,0 +1,2 @@
+money_printer:prueba123:anark1stx,wheel
+carlos:prueba:sftp_users,wheel,test
