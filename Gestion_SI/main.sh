@@ -9,15 +9,15 @@ opcion0="99"
 clear
 while [ "$opcion0" != "0"  ] 
 do
-	echo "----------------------------------------------------------------"
-	echo "|		Menu de Gestion SIBIM 			              |"
-	echo "|								      |"
-	echo "|1- Gestionar usuarios y grupos				      |"
-	echo "|2- Mantenimiento						      |"
-	echo "|3- Configurar servidor(es)				      |"
-	echo "|4- Agregar y configurar usuarios de proyecto 		      |"
-	echo "|0- Salir							      |"
-	echo "----------------------------------------------------------------"
+	echo "---------------------------------------------------------"
+	echo "|		Menu de Gestion SIBIM 			|"
+	echo "|							|"
+	echo "|1- Gestionar usuarios y grupos				|"
+	echo "|2- Mantenimiento					|"
+	echo "|3- Configurar servidor(es)				|"
+	echo "|4- Agregar y configurar usuarios de proyecto		|"
+	echo "|0- Salir						|"
+	echo "---------------------------------------------------------"
 	read -p "> " opcion0
 
 	case "$opcion0" in 

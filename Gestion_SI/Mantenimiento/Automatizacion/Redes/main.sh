@@ -4,15 +4,15 @@ opciont="99"
 clear
 while [ "$opciont" != "0"  ] 
 do
-	echo "----------------------------------------------------------------"
-	echo "|		Menu de Automatizacion (SERVIDORES) 			|"
-	echo "|									|"
-	echo "|1- Configurar como servidor DNS					|"
-	echo "|2- Configurar como servidor DHCP					|"
-	echo "|3- Configurar como servidor principal				|"
-	echo "|4- Configurar como servidor de respaldos				|"
-	echo "|0- Salir								|"
-	echo "----------------------------------------------------------------"
+	echo "---------------------------------------------------------"
+	echo "|		Menu de Automatizacion (SERVIDORES) 	|"
+	echo "|							|"
+	echo "|1- Configurar como servidor DNS			|"
+	echo "|2- Configurar como servidor DHCP			|"
+	echo "|3- Configurar como servidor principal			|"
+	echo "|4- Configurar como servidor de respaldos		|"
+	echo "|0- Salir						|"
+	echo "--------------------------------------------------------"
 	read -p "> " opciont
 
 	case "$opciont" in 

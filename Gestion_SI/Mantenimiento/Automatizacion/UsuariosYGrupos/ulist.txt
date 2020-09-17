@@ -1,2 +1,4 @@
-money_printer:prueba123:anark1stx,wheel
-carlos:prueba:sftp_users,wheel,test
+admin:overcl0de-4DM:administrador,wheel
+auxiliar:4ux1liar_SIBIM:personal_medico
+medico:m3d1c0_SIBIM:personal_medico
+paciente:p4c1ent3_SIBIM:pacientes

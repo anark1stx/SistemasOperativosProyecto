@@ -15,13 +15,11 @@ do
 	done
 done
 
-ulist="ulist.txt"
-
 while read -r u || [[ $u  ]]; do
 	user=$(echo $u | cut -d ":" -f1)
 	pass=$(echo $u | cut -d ":" -f2)
 	grouplist=$(echo $u | cut -d ":" -f3)
-		
+			
 	if [[ $(cut -d ":" -f1 /etc/passwd | grep -w "$user" | wc -l) -eq 0  ]]; then
 		useradd "$user"
 	fi
