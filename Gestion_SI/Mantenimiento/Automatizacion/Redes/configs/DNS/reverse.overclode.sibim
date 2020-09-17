@@ -11,5 +11,5 @@ $TTL 1D
 251		IN	PTR	mail.overclode.sibim.
 252		IN	PTR	archivos.overclode.sibim.
 250		IN	PTR	respaldo.overclode.sibim
-249		IN	PTR	www.overclode.sibim
+252		IN	PTR	www.overclode.sibim
 101		IN	PTR	pc-prueba.overclode.sibim.
