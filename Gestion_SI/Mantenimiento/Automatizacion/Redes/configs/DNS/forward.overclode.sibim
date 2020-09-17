@@ -14,5 +14,5 @@ ns1			IN	A	192.168.0.253
 archivos		IN	A	192.168.0.252
 respaldo		IN	A	192.168.0.250
 mail			IN	A	192.168.0.251
-www			IN	A	192.168.0.249
+www			IN	A	192.168.0.252
 pc-prueba		IN	A	192.168.0.101
