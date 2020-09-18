@@ -1,5 +1,5 @@
 #!/bin/bash 
-
+. /Mantenimiento/Respaldar/MySQL/funciones.sh
 
 opciont="99"
 clear
@@ -18,7 +18,7 @@ do #hagamos de cuenta que mysql tiene respaldos incrementales y diferenciales
 	case "$opciont" in 
 		"1")
 			clear
-			respaldar_mysql 1 #funcion para respaldar mysql en el archivo funciones.sh
+			respaldar_mysql 1 
 			;;
 
 		"2")

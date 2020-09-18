@@ -37,11 +37,11 @@ ifup $interfaz
 systemctl restart network
 
 #VERIFICAR SI TENGO INTERNET
-test_conn=$(ping -c1 8.8.8.8 | grep "100% packet loss")
+test_conn=$(ping -c1 www.google.com | grep "100% packet loss")
 if [[ -z "$test_conn" ]]; then
 	echo "Red configurada con exito."
 else
-	echo "Hubieron errores configurando la red. Verifique que el servidor DNS haya sido configurado y esté encendido."
+	echo "Hubieron errores configurando la red."
 	exit
 fi
 
@@ -61,9 +61,9 @@ echo "OPTIONS=-"4"" >> /etc/sysconfig/named #para indicar que estamos usando IPv
 
 systemctl start named
 systemctl enable named
+firewall-cmd --zone=public --add-port=53/tcp --permanent
 systemctl start firewalld
 systemctl enable firewalld
-firewall-cmd --zone=public --add-port=53/tcp --permanent
 
 named_status=$(systemctl show -p ActiveState named | cut -d "=" -f2)
 
