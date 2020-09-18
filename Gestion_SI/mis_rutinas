@@ -1,5 +1,8 @@
-#backup_home.sh
+#backup_home.sh total
 0 0 1 * * /var/scripts_cron/backup_home.sh
+
+#backup_home.sh incremental
+0 0 * * *
 
 #backup_etc.sh
 0 0 1 * * /var/scripts_cron/backup_etc.sh
@@ -13,7 +16,7 @@
 #backup_sibim.sh
 0 0 1 * * /var/scripts_cron/backup_sibim.sh
 
-#backup_etc_passwd.sh cada 7 dias los domingos a las 00:00
+#backup_etc_passwd.sh 
 0 0 * * 0 /var/scripts_cron/backup_etc_passwd.sh
 
 #backup_etc_shadow.sh
