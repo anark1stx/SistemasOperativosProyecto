@@ -110,3 +110,17 @@ touch /home/admin/.my.cnf
 cat .my.cnf > /home/admin/.my.cnf
 chown admin: /home/admin/.my.cnf
 su admin -c chmod 600 ~/.my.cnf
+
+#copio todos los scripts al directorio acordado
+cp -R Mantenimiento/Automatizacion/scripts_cron /var/scripts_con
+
+#copio el archivo de rutinas de cron
+cp mis_rutinas /var/mis_rutinas
+
+#asigno el archivo
+crontab /var/mis_rutinas
+
+
+
+
+

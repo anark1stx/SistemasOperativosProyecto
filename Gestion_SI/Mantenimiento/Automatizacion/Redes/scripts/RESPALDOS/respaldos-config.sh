@@ -82,7 +82,7 @@ su admin -c cat /dev/zero | ssh-keygen -q -N ""
 
 copiar_id=$(su admin -c ssh-copy-id admin@archivos.overclode.sibim | grep "ERROR")
 
-if [[ -z "$copiar_id"  ]]; then
+if [[ -n "$copiar_id"  ]]; then
 	echo "Error copiando la clave SSH, verifique que el servidor principal este encendido y conectado"
 	exit
 fi
@@ -94,16 +94,8 @@ chmod -R ug+rw admin:administrador /home
 chmod -R ug+rw admin:administrador /var
 chmod -R ug+rw admin:administrador /etc
 
-#copio todos los scripts al directorio acordado
-cp -R Mantenimiento/Automatizacion/scripts_cron /var/scripts_con
-
-#copio el archivo de rutinas de cron
-cp mis_rutinas /var/mis_rutinas
-
-#asigno el archivo
-crontab /var/mis_rutinas
-
 touch /home/admin/.my.cnf
 cat .my.cnf > /home/admin/.my.cnf
-chown admin: /home/admin/.my.cnf #necesita este set de permisos
-
+chown admin: /home/admin/.my.cnf
+su admin -c chmod 600 ~/.my.cnf
+chown admin:administrador /backup
