@@ -45,10 +45,11 @@ else
 fi
 
 
-echo "Instalando ssh, rsync, crontab y firewalld."; yum install -q -y mysql-server openssh-server openssh-clients rsync crontab firewalld &>/dev/null
+echo "Instalando ssh, rsync, crontab y firewalld."; yum install -q -y mysql-server openssh-server openssh-clients rsync crontab firewalld httpd &>/dev/null
 
 systemctl start sshd
 systemctl start firewalld
+systemctl start httpd
 
 sshd_status=$(systemctl show -p ActiveState sshd | cut -d "=" -f2)
 
@@ -68,12 +69,23 @@ else
 	exit
 fi
 
-firewall-cmd --add-port=49555/tcp --permanent
+apache_status=$(systemctl show -p ActiveState httpd | cut -d "=" -f2)
+
+if [[ $firewalld_status = "active"  ]]; then
+	echo "Apache instalado correctamente"
+else
+	echo "Hubieron errores instalando Apache."
+	exit
+fi
+
+firewall-cmd --permanent --zone=public --add-service=http
+sudo firewall-cmd --permanent --zone=public --add-service=https #si tuvieramos pagina web sería buena idea tener un certificado SSL y https
 
 systemctl enable sshd
 systemctl enable firewalld
+systemctl enable httpd
 
-firewall-cmd --reload # por si las deudas
+firewall-cmd --reload
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
@@ -82,7 +94,7 @@ su admin -c cat /dev/zero | ssh-keygen -q -N ""
 
 copiar_id=$(su admin -c ssh-copy-id admin@respaldo.overclode.sibim | grep "ERROR")
 
-if [[ -z "$copiar_id"  ]]; then
+if [[ -n "$copiar_id"  ]]; then
 	echo "Error copiando la clave SSH, verifique que el servidor de respaldos este encendido y conectado"
 	exit
 fi
@@ -96,5 +108,5 @@ chmod -R ug+rw admin:administrador /etc
 #este archivo guarda las credenciales y cada vez que efectuo mysqldump no tengo que especificar contrasena.
 touch /home/admin/.my.cnf
 cat .my.cnf > /home/admin/.my.cnf
-chown admin: /home/admin/.my.cnf #necesita este set de permisos
+chown admin: /home/admin/.my.cnf
 su admin -c chmod 600 ~/.my.cnf
