@@ -1,47 +1,46 @@
 #backup_home.sh total
-0 0 1 * * /var/scripts_cron/backup_home.sh
+0 0 1 * * /var/scripts_cron/backup_home.sh "TOTAL"
 
 #backup_home.sh incremental
-0 0 * * *
+0 0 * * * /var/scripts_cron/backup_home.sh "INCREMENTAL"
 
 #backup_etc.sh
-0 0 1 * * /var/scripts_cron/backup_etc.sh
+0 0 1 * * /var/scripts_cron/backup_etc.sh "TOTAL"
 
 #backup_var.sh
-0 0 1 * * /var/scripts_cron/backup_var.sh
+0 0 1 * * /var/scripts_cron/backup_var.sh "TOTAL"
 
 #backup_mysql.sh
-0 0 1 * * /var/scripts_cron/backup_mysql.sh
+0 0 1 * * /var/scripts_cron/backup_mysql.sh "TOTAL"
 
 #backup_sibim.sh
-0 0 1 * * /var/scripts_cron/backup_sibim.sh
+0 0 1 * * /var/scripts_cron/backup_sibim.sh "TOTAL"
 
 #backup_etc_passwd.sh 
-0 0 * * 0 /var/scripts_cron/backup_etc_passwd.sh
+0 0 * * 0 /var/scripts_cron/backup_etc_passwd.sh "INCREMENTAL"
 
 #backup_etc_shadow.sh
-0 0 * * 0 /var/scripts_cron/backup_etc_shadow.sh
+0 0 * * 0 /var/scripts_cron/backup_etc_shadow.sh "INCREMENTAL"
 
 #backup_etc_sudoers.sh el dia 15 de cada mes a las 00:00
-0 0 15 * * /var/scripts_cron/backup_etc_sudoers.sh
+0 0 15 * * /var/scripts_cron/backup_etc_sudoers.sh "INCREMENTAL"
 
 #backup_mysql_user.sh cada 12 horas
-0 */12 * * * /var/scripts_cron/backup_mysql_user.sh
+0 */12 * * * /var/scripts_cron/backup_mysql_user.sh "INCREMENTAL"
 
 #backup_sibim_usuarios.sh cada 12 horas
-0 */12 * * * /var/scripts_cron/backup_sibim_usuarios.sh
+0 */12 * * * /var/scripts_cron/backup_sibim_usuarios.sh "INCREMENTAL"
 
 #backup_sibim_analisis.sh
-0 0 * * 0 /var/scripts_cron/backup_sibim_analisis.sh
+0 0 * * 0 /var/scripts_cron/backup_sibim_analisis.sh "INCREMENTAL"
 
 #backup_sibim_tratamiento.sh
-0 0 * * 0 /var/scripts_cron/backup_sibim_tratamiento.sh
+0 0 * * 0 /var/scripts_cron/backup_sibim_tratamiento.sh "INCREMENTAL"
 
 #backup_sibim_diagnostico.sh
-0 0 * * 0 /var/scripts_cron/backup_sibim_diagnostico.sh
+0 0 * * 0 /var/scripts_cron/backup_sibim_diagnostico.sh "INCREMENTAL"
 
 #backup_sibim_formulario.sh
-0 0 * * 0 /var/scripts_cron/backup_sibim_formulario.sh
+0 0 * * 0 /var/scripts_cron/backup_sibim_formulario.sh "INCREMENTAL"
 
-#borrar_backups
-0 20 * * * /var/scripts/cron/borrar_backups.sh
+# "INCREMENTAL"/TOTAL indican el tipo de respaldo que van a hacer esos scripts
