@@ -45,7 +45,7 @@ else
 fi
 
 
-echo "Instalando ssh, rsync, crontab y firewalld."; yum install -q -y mysql-server openssh-server openssh-clients rsync crontab firewalld httpd &>/dev/null
+echo "Instalando ssh, rsync, crontab y firewalld."; yum install -q -y mysql-server openssh-server openssh-clients sshpass rsync crontab firewalld httpd &>/dev/null
 
 systemctl start sshd
 systemctl start firewalld
@@ -92,14 +92,16 @@ sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabil
 #genero clave ssh
 su admin -c cat /dev/zero | ssh-keygen -q -N ""
 
-copiar_id=$(su admin -c ssh-copy-id admin@respaldo.overclode.sibim | grep "ERROR")
+adminpwd=$(grep -w "admin" Mantenimiento/Automatizacion/UsuariosYGrupos/ulist.txt | cut -d ":" -f2)
+copiar_id=$(su admin -c sshpass -p "$adminpwd" ssh-copy-id "-p 49555" admin@192.168.0.250 | grep "denied\|ERROR")
 
 if [[ -n "$copiar_id"  ]]; then
 	echo "Error copiando la clave SSH, verifique que el servidor de respaldos este encendido y conectado"
 	exit
 fi
 
-cat $mi_ssh > /etc/ssh/sshd_config  #la configuracion de SSH
+cat $mi_ssh > /etc/ssh/sshd_config  #aplico recien ahora la configuracion ya que sino no podia conectarme con usuario y contraseña, con esta configuracion habilitada solo se puede entrar con SSHKEY.
+systemctl restart sshd
 
 chmod -R ug+rw admin:administrador /home
 chmod -R ug+rw admin:administrador /var
@@ -112,15 +114,10 @@ chown admin: /home/admin/.my.cnf
 su admin -c chmod 600 ~/.my.cnf
 
 #copio todos los scripts al directorio acordado
-cp -R Mantenimiento/Automatizacion/scripts_cron /var/scripts_con
+cp -R Mantenimiento/Automatizacion/scripts_cron /var/scripts_cron
 
 #copio el archivo de rutinas de cron
 cp mis_rutinas /var/mis_rutinas
 
 #asigno el archivo
 crontab /var/mis_rutinas
-
-
-
-
-
