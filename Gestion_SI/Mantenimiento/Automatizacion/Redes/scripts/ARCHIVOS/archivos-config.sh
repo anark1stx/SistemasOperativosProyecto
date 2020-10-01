@@ -97,4 +97,4 @@ chmod -R ug+rw admin:administrador /etc
 touch /home/admin/.my.cnf
 cat .my.cnf > /home/admin/.my.cnf
 chown admin: /home/admin/.my.cnf #necesita este set de permisos
-
+su admin -c chmod 600 ~/.my.cnf
