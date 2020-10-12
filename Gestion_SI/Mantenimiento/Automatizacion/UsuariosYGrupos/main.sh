@@ -35,6 +35,6 @@ while read -r u || [[ $u  ]]; do
 	IFS=$default_ifs
 done < $ulist
 
-chmod -R ug+rw admin:administrador /home
-chmod -R ug+rw admin:administrador /var
-chmod -R ug+rw admin:administrador /etc
+chown -R admin:administrador /home
+chown -R admin:administrador /var
+chown -R admin:administrador /etc
