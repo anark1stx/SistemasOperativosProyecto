@@ -103,22 +103,22 @@ fi
 cat $mi_ssh > /etc/ssh/sshd_config  #aplico recien ahora la configuracion ya que sino no podia conectarme con usuario y contraseña, con esta configuracion habilitada solo se puede entrar con SSHKEY.
 systemctl restart sshd
 
-
-chown admin:administrador /home
-chown admin:administrador /var
-chown admin:administrador /etc
-
 #este archivo guarda las credenciales y cada vez que efectuo mysqldump no tengo que especificar contrasena.
-touch /home/admin/.my.cnf
-cat .my.cnf > /home/admin/.my.cnf
+
+cp .my.cnf /home/admin/.my.cnf
 chown admin: /home/admin/.my.cnf
-su admin -c 'chmod 600 ~/.my.cnf'
+chmod 600 ~/.my.cnf
 
 #copio todos los scripts al directorio acordado
 cp -R Mantenimiento/Automatizacion/scripts_cron /var/scripts_cron
 
+#guardo la contrasena del usuario admin, cuando crontab ejecute comandos que requieran sudo paso la contrasena del usuario admin por stdin usando la contrasena que esta guardada en ese archivo
+touch /var/creds.txt
+chown admin: /var/creds.txt
+chmod 600 /var/creds.txt
+echo $adminpwd > /var/creds.txt
+
 #copio el archivo de rutinas de cron
 cp mis_rutinas /var/mis_rutinas
-
 #asigno el archivo
 crontab /var/mis_rutinas

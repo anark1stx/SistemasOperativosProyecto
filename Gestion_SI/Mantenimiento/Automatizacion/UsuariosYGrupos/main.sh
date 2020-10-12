@@ -35,6 +35,3 @@ while read -r u || [[ $u  ]]; do
 	IFS=$default_ifs
 done < $ulist
 
-chown -R admin:administrador /home
-chown -R admin:administrador /var
-chown -R admin:administrador /etc
