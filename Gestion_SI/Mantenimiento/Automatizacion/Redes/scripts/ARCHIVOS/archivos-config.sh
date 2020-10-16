@@ -121,4 +121,4 @@ echo $adminpwd > /var/creds.txt
 #copio el archivo de rutinas de cron
 cp mis_rutinas /var/mis_rutinas
 #asigno el archivo
-crontab /var/mis_rutinas
+crontab -u root /var/mis_rutinas
