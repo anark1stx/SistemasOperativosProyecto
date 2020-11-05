@@ -106,13 +106,18 @@ firewall-cmd --reload
 
 #este archivo guarda las credenciales y cada vez que efectuo mysqldump no tengo que especificar contrasena.
 cp .my.cnf /home/admin/.my.cnf
-chown admin: /home/admin/.my.cnf
+chown admin /home/admin/.my.cnf
 chmod 600 ~/.my.cnf
 
 #copio todos los scripts al directorio acordado
 cp -R Mantenimiento/Automatizacion/scripts_cron /var/scripts_cron
-
+chown -R admin /var/scripts_cron
+chmod 711 /var/scripts_cron
 #copio el archivo de rutinas de cron
 cp mis_rutinas /var/mis_rutinas
 #asigno el archivo
 crontab -u root /var/mis_rutinas
+
+mkdir /logs
+chown -R admin /logs
+chmod -R 755 /logs 
