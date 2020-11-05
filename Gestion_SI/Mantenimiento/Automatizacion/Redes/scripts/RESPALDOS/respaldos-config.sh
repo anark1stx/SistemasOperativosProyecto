@@ -35,7 +35,7 @@ ifdown $interfaz
 ifup $interfaz
 systemctl restart network
 
-echo "Instalando git, ssh, rsync y firewalld."; yum install -q -y git openssh-server openssh-clients sshpass rsync firewalld &>/dev/null
+echo "Instalando git, ssh, rsync y firewalld."; yum install -q -y git openssh-server openssh-clients sshpass rsync firewalld &>/dev/null && echo "paquetes instalados con exito" || echo "error instalando paquetes"; exit
 
 systemctl start sshd
 systemctl start firewalld

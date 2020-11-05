@@ -44,7 +44,7 @@ else
 	exit
 fi
 
-echo "Instalando mysql, git, ssh, rsync, crontab y firewalld."; yum install -q -y mysql-server git openssh-server openssh-clients sshpass rsync crontab firewalld httpd &>/dev/null
+echo "Instalando mysql, git, ssh, rsync, crontab y firewalld."; yum install -q -y mysql-server git openssh-server openssh-clients sshpass rsync crontab firewalld httpd &>/dev/null || echo "Hubo errores instalando los paquetes"; exit
 
 systemctl start sshd
 systemctl start firewalld
