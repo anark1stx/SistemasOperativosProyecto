@@ -84,8 +84,6 @@ systemctl enable sshd
 systemctl enable firewalld
 systemctl enable httpd
 
-firewall-cmd --reload
-
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
 #genero clave ssh
@@ -104,6 +102,7 @@ cat $mi_ssh > /etc/ssh/sshd_config
 sudo firewall-cmd --add-port=49555/tcp --permanent
 sudo firewall-cmd --remove-port=22/tcp
 systemctl restart sshd
+firewall-cmd --reload
 
 #este archivo guarda las credenciales y cada vez que efectuo mysqldump no tengo que especificar contrasena.
 cp .my.cnf /home/admin/.my.cnf
