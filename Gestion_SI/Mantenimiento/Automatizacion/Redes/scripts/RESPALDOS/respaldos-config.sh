@@ -63,13 +63,9 @@ systemctl enable firewalld
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
-sudo firewall-cmd --add-port=49555/tcp --permanent
-sudo firewall-cmd --remove-port=22/tcp
-systemctl restart sshd
 firewall-cmd --reload
 
 mkdir /backup && mkdir /backup/SIBIM-BDS && mkdir /backup/Linux
 cd /backup/Linux && git init
 cd /backup/SIBIM-BDS && git init
 chown -R admin /backup
-
