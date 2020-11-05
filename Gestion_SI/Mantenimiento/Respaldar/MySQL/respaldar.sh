@@ -1,16 +1,15 @@
 #!/bin/bash 
-. /Mantenimiento/Respaldar/MySQL/funciones.sh
 
 opciont="99"
 clear
 while [ "$opciont" != "0"  ] 
-do #hagamos de cuenta que mysql tiene respaldos incrementales y diferenciales
+do
 	echo "----------------------------------------------------------------"
 	echo "|		Menu de respaldos 			        |"
 	echo "|								|"
-	echo "|1- Respaldo Total							|"
-	echo "|2- Respaldo Incremental					|"
-	echo "|3- Respaldo Diferencial							|"
+	echo "|1- Respaldar todas las bases de datos			|"
+	echo "|2- Respaldar base de datos SIBIM				|"
+	echo "|3- Respaldar base de datos MySQL					|"
 	echo "|0- Salir							|"
 	echo "----------------------------------------------------------------"
 	read -p "> " opciont
@@ -18,17 +17,18 @@ do #hagamos de cuenta que mysql tiene respaldos incrementales y diferenciales
 	case "$opciont" in 
 		"1")
 			clear
-			respaldar_mysql 1 
+			./Mantenimiento/Automatizacion/scripts_cron/backup_sibim.sh
+			./Mantenimiento/Automatizacion/scripts_cron/backup_mysql.sh
 			;;
 
 		"2")
 			clear
-			respaldar_mysql 2
+			./Mantenimiento/Automatizacion/scripts_cron/backup_sibim.sh
 			;;
 
 		"3")
 			clear
-			respaldar_mysql 3
+			./Mantenimiento/Automatizacion/scripts_cron/backup_mysql.sh
 			;;
 		"0")
 			clear

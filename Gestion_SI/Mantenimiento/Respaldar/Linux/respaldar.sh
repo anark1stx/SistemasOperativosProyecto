@@ -5,11 +5,11 @@ clear
 while [ "$opciony" != "0"  ] 
 do
 	echo "----------------------------------------------------------------"
-	echo "|		Menu de respaldos 			        |"
+	echo "|		Menu de respaldos Linux			        |"
 	echo "|								|"
-	echo "|1- Respaldo Total							|"
-	echo "|2- Respaldo Incremental					|"
-	echo "|3- Respaldo Diferencial							|"
+	echo "|1- Efectuar respaldo completo				|"
+	echo "|2- Respaldar directorio home				|"
+	echo "|3- Respaldar directorio etc				|"			
 	echo "|0- Salir							|"
 	echo "----------------------------------------------------------------"
 	read -p "> " opciony
@@ -17,17 +17,18 @@ do
 	case "$opciony" in 
 		"1")
 			clear
-			respaldar_linux TOTAL #funcion para respaldar linux en el archivo funciones.sh
+			./Mantenimiento/Automatizacion/scripts_cron/backup_home.sh
+			./Mantenimiento/Automatizacion/scripts_cron/backup_etc.sh
 			;;
 
 		"2")
 			clear
-			respaldar_linux INCREMENTAL
+			./Mantenimiento/Automatizacion/scripts_cron/backup_home.sh
 			;;
 
 		"3")
 			clear
-			respaldar_linux DIFERENCIAL
+			./Mantenimiento/Automatizacion/scripts_cron/backup_etc.sh
 			;;
 		"0")
 			clear

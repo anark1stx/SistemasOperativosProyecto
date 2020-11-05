@@ -1,9 +1,0 @@
-#!/bin/bash -
-
-#TIPOS DE RESPALDO
-RESPALDOS=(TOTAL INCREMENTAL DIFERENCIAL)
-
-
-respaldar_linux(){
-	
-}
