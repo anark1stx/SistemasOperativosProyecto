@@ -1,13 +1,11 @@
 #!/bin/bash
-#SCRIPT PARA AUTOMATIZAR LA CONFIGURACION DEL SERVIDOR RESPALDOS.
+#SCRIPT PARA AUTOMATIZAR LA CONFIGURACION DEL SERVIDOR DE RESPALDOS.
 #ESTE SCRIPT NO DEBE SER EJECUTADO DIRECTAMENTE, ABRIR DESDE EL MENU PRINCIPAL.
 #NOTA: en caso de estar usando un servicio virtualizado, el gateway del adaptador de red de la PC en la que esté corriendo esta máquina debe cambiarse a la especificada en la carpeta (192.168.0.1).
 
-#CORRER SCRIPT PARA CREAR LOS USUARIOS Y GRUPOS NECESARIOS
-./Mantenimiento/Automatizacion/UsuariosYGrupos/main.sh && echo "usuarios y grupos creados con exito."
+./Mantenimiento/Automatizacion/UsuariosYGrupos/main.sh && echo "usuarios y grupos creados con exito." || echo "$(date '+%d/%m/%Y %H:%M:%S'): error creando grupos y usuarios, abortando" ; exit 
 
 mi_interfaz="Mantenimiento/Automatizacion/Redes/configs/RESPALDOS/interface" #archivo preconfigurado de la interfaz
-mi_ssh="Mantenimiento/Automatizacion/Redes/configs/ARCHIVOS/ssh" #es la misma configuracion que el de archivos por ahora
 FOUND=$(cat /proc/net/dev | grep -v "lo" | grep ":") #verificar que haya conectado algun adaptador de red
 
 if  [ -n "$FOUND" ] ; then
@@ -31,21 +29,13 @@ sed -i "/DEVICE=/c DEVICE=\"$interfaz\"" $mi_interfaz
 sed -i "/NAME=/c NAME=\"$interfaz\"" $mi_interfaz
 
 cat $mi_interfaz > /etc/sysconfig/network-scripts/ifcfg-$interfaz #sobreescribir el archivo
-hostnamectl set-hostname --static "RESPALDOS"
+hostnamectl set-hostname --static "ARCHIVOS"
 
 ifdown $interfaz
 ifup $interfaz
 systemctl restart network
 
-test_conn=$(ping -c1 192.168.0.253 | grep "100% packet loss")
-if [[ -z "$test_conn" ]]; then
-	echo "Red configurada con exito."
-else
-	echo "Hubieron errores configurando la red. Verifique que el servidor DNS haya sido configurado y esté encendido."
-	exit
-fi
-
-echo "Instalando ssh, rsync, crontab y firewalld."; yum install -q -y mysql-server openssh-server openssh-clients rsync crontab firewalld &>/dev/null
+echo "Instalando git, ssh, rsync y firewalld."; yum install -q -y git openssh-server openssh-clients sshpass rsync firewalld &>/dev/null
 
 systemctl start sshd
 systemctl start firewalld
@@ -68,37 +58,18 @@ else
 	exit
 fi
 
-firewall-cmd --add-port=49555/tcp --permanent
-
 systemctl enable sshd
 systemctl enable firewalld
 
-firewall-cmd --reload # por si las deudas
-
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
-#genero clave ssh
-su admin -c cat /dev/zero | ssh-keygen -q -N ""
-
-
-adminpwd=$(grep -w "admin" Mantenimiento/Automatizacion/UsuariosYGrupos/ulist.txt | cut -d ":" -f2)
-copiar_id=$(su admin -c sshpass -p "$adminpwd" ssh-copy-id "-p 49555" admin@192.168.0.250 | grep "denied\|ERROR")
-
-if [[ -n "$copiar_id"  ]]; then
-	echo "Error copiando la clave SSH, verifique que el servidor de respaldos este encendido y conectado"
-	exit
-fi
-
-cat $mi_ssh > /etc/ssh/sshd_config  #aplico recien ahora la configuracion ya que sino no podia conectarme con usuario y contraseña, con esta configuracion habilitada solo se puede entrar con SSHKEY.
+sudo firewall-cmd --add-port=49555/tcp --permanent
+sudo firewall-cmd --remove-port=22/tcp
 systemctl restart sshd
+firewall-cmd --reload
 
-mkdir /backup
-chmod -R ug+rw admin:administrador /home
-chmod -R ug+rw admin:administrador /var
-chmod -R ug+rw admin:administrador /etc
+mkdir /backup && mkdir /backup/SIBIM-BDS && mkdir /backup/Linux
+cd /backup/Linux && git init
+cd /backup/SIBIM-BDS && git init
+chown -R admin /backup
 
-touch /home/admin/.my.cnf
-cat .my.cnf > /home/admin/.my.cnf
-chown admin: /home/admin/.my.cnf
-su admin -c chmod 600 ~/.my.cnf
-chown admin:administrador /backup
