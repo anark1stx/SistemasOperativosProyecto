@@ -52,12 +52,31 @@ else
 	echo "Hubieron errores instalando Firewalld."
 	exit
 fi
+
 systemctl enable firewalld
 systemctl start postfix
 systemctl start dovecot
 sudo firewall-cmd --add-port=25/tcp --permanent
 sudo firewall-cmd --add-port=143/tcp --permanent
 firewall-cmd --reload
+
+postfix_status=$(systemctl show -p ActiveState postfix | cut -d "=" -f2)
+
+if [[ $postfix_status = "active"  ]]; then
+	echo "Postfix instalado correctamente"
+else
+	echo "Hubieron errores instalando Postfix."
+	exit
+fi
+
+dovecot_status=$(systemctl show -p ActiveState dovecot | cut -d "=" -f2)
+
+if [[ $dovecot_status = "active"  ]]; then
+	echo "Dovecot instalado correctamente"
+else
+	echo "Hubieron errores instalando Dovecot."
+	exit
+fi
 
 systemctl enable postfix
 systemctl enable dovecot
