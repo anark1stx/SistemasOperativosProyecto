@@ -7,7 +7,7 @@
 
 mi_interfaz="Mantenimiento/Automatizacion/Redes/configs/RESPALDOS/interface" #archivo preconfigurado de la interfaz
 FOUND=$(cat /proc/net/dev | grep -v "lo" | grep ":") #verificar que haya conectado algun adaptador de red
-
+mi_ssh="Mantenimiento/Automatizacion/Redes/configs/RESPALDOS/ssh"
 if  [ -n "$FOUND" ] ; then
 	echo "Adaptador(es) de red detectados: "
         echo $FOUND
@@ -63,6 +63,10 @@ systemctl enable firewalld
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
+cat $mi_ssh > /etc/ssh/sshd_config
+sudo firewall-cmd --add-port=49555/tcp --permanent
+sudo firewall-cmd --remove-port=22/tcp
+systemctl restart sshd
 firewall-cmd --reload
 
 mkdir /backup && mkdir /backup/SIBIM-BDS && mkdir /backup/Linux
