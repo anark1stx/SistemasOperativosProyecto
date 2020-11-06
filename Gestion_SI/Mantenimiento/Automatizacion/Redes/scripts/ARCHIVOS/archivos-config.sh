@@ -70,7 +70,7 @@ fi
 
 apache_status=$(systemctl show -p ActiveState httpd | cut -d "=" -f2)
 
-if [[ $firewalld_status = "active"  ]]; then
+if [[ $apache_status = "active"  ]]; then
 	echo "Apache instalado correctamente"
 else
 	echo "Hubieron errores instalando Apache."
