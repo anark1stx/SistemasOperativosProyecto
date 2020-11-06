@@ -41,4 +41,23 @@ else
 	exit
 fi
 
-echo "Instalando postfix y dovecot"; yum install -q -y postfix dovecot &>/dev/null && echo "paquetes instalados con exito, puede proceder con su instalacion" || echo "Hubo errores instalando los paquetes"
+echo "Instalando firewalld, postfix y dovecot"; yum install -q -y postfix dovecot &>/dev/null && echo "paquetes instalados con exito, puede proceder con su instalacion" || echo "Hubo errores instalando los paquetes"; exit
+systemctl start firewalld
+
+firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
+
+if [[ $firewalld_status = "active"  ]]; then
+	echo "Firewalld instalado correctamente"
+else
+	echo "Hubieron errores instalando Firewalld."
+	exit
+fi
+systemctl enable firewalld
+systemctl start postfix
+systemctl start dovecot
+sudo firewall-cmd --add-port=25/tcp --permanent
+sudo firewall-cmd --add-port=143/tcp --permanent
+firewall-cmd --reload
+
+systemctl enable postfix
+systemctl enable dovecot
