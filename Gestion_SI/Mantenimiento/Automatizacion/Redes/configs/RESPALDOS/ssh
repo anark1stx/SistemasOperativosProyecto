@@ -62,8 +62,7 @@ AuthorizedKeysFile	.ssh/authorized_keys
 # To disable tunneled clear text passwords, change to no here!
 #PasswordAuthentication no
 #PermitEmptyPasswords no
-PasswordAuthentication no #deshabilito el login con contraseña
-
+PasswordAuthentication si
 # Change to no to disable s/key passwords
 #ChallengeResponseAuthentication yes
 ChallengeResponseAuthentication no
@@ -138,4 +137,3 @@ AcceptEnv XMODIFIERS
 #	ForceCommand cvs server
 #Match Group sftp_users
 #ChrootDirectory /data
-#ForceCommand internal-sftp #si usaramos sftp :////////////////////////////////
