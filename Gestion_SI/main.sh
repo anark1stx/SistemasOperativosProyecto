@@ -5,6 +5,8 @@ if [[ ${EUID:-$(id -u)} -ne 0 ]]; then
 	exit
 fi
 
+mkdir -p /logs
+
 opcion0="99"
 clear
 while [ "$opcion0" != "0"  ] 

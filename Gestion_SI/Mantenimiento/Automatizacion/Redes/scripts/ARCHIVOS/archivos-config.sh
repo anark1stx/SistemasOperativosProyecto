@@ -3,7 +3,7 @@
 #ESTE SCRIPT NO DEBE SER EJECUTADO DIRECTAMENTE, ABRIR DESDE EL MENU PRINCIPAL.
 #NOTA: en caso de estar usando un servicio virtualizado, el gateway del adaptador de red de la PC en la que esté corriendo esta máquina debe cambiarse a la especificada en la carpeta (192.168.0.1).
 
-./Mantenimiento/Automatizacion/UsuariosYGrupos/main.sh && echo "usuarios y grupos creados con exito." || echo "$(date '+%d/%m/%Y %H:%M:%S'): error creando grupos y usuarios, abortando" ; exit 
+./Mantenimiento/Automatizacion/UsuariosYGrupos/main.sh && echo "usuarios y grupos creados con exito." || (echo "$(date '+%d/%m/%Y %H:%M:%S'): error creando grupos y usuarios, abortando" >> /logs/resultados_scripts.log ; exit) 
 
 mi_interfaz="Mantenimiento/Automatizacion/Redes/configs/ARCHIVOS/interface" #archivo preconfigurado de la interfaz
 mi_ssh="Mantenimiento/Automatizacion/Redes/configs/ARCHIVOS/ssh"
@@ -13,8 +13,7 @@ if  [ -n "$FOUND" ] ; then
 	echo "Adaptador(es) de red detectados: "
         echo $FOUND
 else
-	echo "No se encontraron adaptadores de red :(. Hace el favor de conectar el cable Ethernet."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): No se encontraron adaptadores de red :(. Hace el favor de conectar el cable Ethernet." >> /logs/resultados_scripts.log ; exit
 fi
 
 interfaz=$(ip a show | cut -d ' ' -f 2 | grep -v "lo" | sed '/^[[:space:]]*$/d' | head -n 1 | tr -d ':' ) #conseguimos el nombre de la interfaz
@@ -40,8 +39,7 @@ test_conn=$(ping -q -t 5 -w1 -c1 192.168.0.5 && grep "100% packet loss")
 if [[ -z "$test_conn" ]]; then
 	echo "Red configurada con exito."
 else
-	echo "Hubieron errores comunicandose con el servidor de respaldos. Verifique que el servidor de respaldos esté encendido y que haya sido configurado."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores comunicandose con el servidor de respaldos. Verifique que el servidor de respaldos esté encendido y que haya sido configurado." >> /logs/resultados_scripts.log ; exit
 fi
 
 echo "Instalando mysql, git, ssh, rsync, crontab y firewalld."; yum install -q -y mysql-server git openssh-server openssh-clients sshpass rsync crontab firewalld httpd &>/dev/null || echo "Hubo errores instalando los paquetes"; exit
@@ -55,8 +53,7 @@ sshd_status=$(systemctl show -p ActiveState sshd | cut -d "=" -f2)
 if [[ $sshd_status = "active"  ]]; then
 	echo "SSH instalado correctamente"
 else
-	echo "Hubieron errores instalando SSH."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando SSH." >> /logs/resultados_scripts.log ; exit
 fi
 
 firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
@@ -64,8 +61,7 @@ firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
 if [[ $firewalld_status = "active"  ]]; then
 	echo "Firewalld instalado correctamente"
 else
-	echo "Hubieron errores instalando Firewalld."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Firewalld." >> /logs/resultados_scripts.log ; exit
 fi
 
 apache_status=$(systemctl show -p ActiveState httpd | cut -d "=" -f2)
@@ -73,8 +69,8 @@ apache_status=$(systemctl show -p ActiveState httpd | cut -d "=" -f2)
 if [[ $apache_status = "active"  ]]; then
 	echo "Apache instalado correctamente"
 else
-	echo "Hubieron errores instalando Apache."
-	exit
+
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Apache." >> /logs/resultados_scripts.log ; exit
 fi
 
 firewall-cmd --permanent --zone=public --add-service=http
@@ -90,11 +86,10 @@ sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabil
 su admin -c cat /dev/zero | ssh-keygen -q -N ""
 
 adminpwd=$(grep -w "admin" Mantenimiento/Automatizacion/UsuariosYGrupos/ulist.txt | cut -d ":" -f2)
-copiar_id=$(su admin -c sshpass -p "$adminpwd" ssh-copy-id "-p 49555" admin@192.168.0.5 | grep "denied\|ERROR")
+copiar_id=$(su admin -c sshpass -p "$adminpwd" ssh-copy-id "-p 49555" admin@192.168.0.5 | grep "denied\|ERROR") #sshpass permite pasar la contrasena del usuario a ssh por stdin
 
 if [[ -n "$copiar_id"  ]]; then
-	echo "Error copiando la clave SSH, verifique que el servidor de respaldos este encendido y conectado"
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): No se pudo establecer comunicacion con el servidor de respaldos, verifique que este encendido y que haya sido configurado." >> /logs/resultados_scripts.log ; exit
 fi
 
 cat $mi_ssh > /etc/ssh/sshd_config
@@ -111,13 +106,6 @@ chmod 600 ~/.my.cnf
 
 #copio todos los scripts al directorio acordado
 cp -R Mantenimiento/Automatizacion/scripts_cron /var/scripts_cron
-chown -R admin /var/scripts_cron
-chmod 711 /var/scripts_cron
-#copio el archivo de rutinas de cron
 cp mis_rutinas /var/mis_rutinas
 #asigno el archivo
 crontab -u root /var/mis_rutinas
-
-mkdir /logs
-chown -R admin /logs
-chmod -R 755 /logs 
