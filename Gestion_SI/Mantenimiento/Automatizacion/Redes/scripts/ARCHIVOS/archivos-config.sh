@@ -42,10 +42,13 @@ else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores comunicandose con el servidor de respaldos. Verifique que el servidor de respaldos esté encendido y que haya sido configurado." >> /logs/resultados_scripts.log ; exit
 fi
 
-echo "Instalando mysql, git, wget ssh, rsync, expect, crontab."; yum install -q -y expect git openssh-server openssh-clients sshpass rsync crontab httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
+echo "Instalando git, wget ssh, rsync, expect, crontab."; yum install -q -y expect git openssh-server openssh-clients sshpass rsync crontab httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 
+echo "Instalando MySQL"
 rm -Rf /var/lib/mysql &>/dev/null #en caso de que ya haya una instalacion borro los datos y desinstalo
 yum remove MariaDB-server -qy &>/dev/null
+#mysql 8 solo funciona sobre arquitectura de 32 bits por lo que tengo que recurrir a mariadb.
+#no existen paquetes para CentOS 7 de 32 bits pero si para centos 6.
 
 {
 echo '# MariaDB 10.3 CentOS repository list - created 2019-10-28 23:35 UTC'
@@ -57,10 +60,11 @@ echo 'gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB'
 echo 'gpgcheck=1'
 } > /etc/yum.repos.d/mariadb.org.repo
 
-yum install -y MariaDB-server
+yum install -y MariaDB-server && echo "Mysql instalado con exito"
 service mysql start
 #la instalacion de mysql fue automatizada con autoexpect, posteriormente si el administrador quisiera hacerla lo puede hacer desde el menu principal, pero a mi me pidieron automatizar asi que automatizamos.
-./mysql.exp
+echo "Iniciando configuracion automatica de mysql"
+./mysql.exp && "Con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo un error configurando mysql de manera automatica, el script seguira corriendo pero debera configurarlo manualmente luego." > /logs/resultados_scripts.log ; exit)
 
 service sshd start
 service httpd start
@@ -112,6 +116,8 @@ fi
 
 cat $mi_ssh > /etc/ssh/sshd_config
 
+echo "Agregando reglas al firewall"
+
 iptables -A INPUT -i lo -j ACCEPT #trafico de la loopback (localhost)
 iptables -A INPUT -p tcp --destination-port 22 -j DROP
 iptables -A INPUT -p tcp -m tcp --dport 49555 -j ACCEPT
@@ -136,5 +142,9 @@ crontab -u root /var/mis_rutinas
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux
 
-ssh -i /home/admin/.ssh/id_rsa.pub admin@192.168.0.5 -p 49555 'sed -i "/PasswordAuthentication yes/c PasswordAuthentication no" /etc/ssh/sshd_config ; service sshd restart'
 #ya que copie la clave ssh deshabilito el ingreso con contraseña en ese servidor
+echo "Desactivando autenticacion con usuario y contrasena en servidor de respaldos."
+ssh -i /home/admin/.ssh/id_rsa.pub admin@192.168.0.5 -p 49555 'sed -i "/PasswordAuthentication yes/c PasswordAuthentication no" /etc/ssh/sshd_config ; service sshd restart' && echo "con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo un error cambiando politicas de seguridad" > /logs/resultados_scripts.log ; exit)
+
+# por ultimo creo la base de datos, roles, usuarios, procedimientos y poblo con los datos q deje precargados
+mysql -u root -p$adminpwd -e < sibim_completo.sql && echo "Bases de datos mysql y sibim instaladas e inicializadas con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo un error creando las bases de datos" > /logs/resultados_scripts.log ; exit) 
