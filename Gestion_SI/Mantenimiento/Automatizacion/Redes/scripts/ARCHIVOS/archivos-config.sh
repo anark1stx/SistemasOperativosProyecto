@@ -35,7 +35,7 @@ ifdown $interfaz
 ifup $interfaz
 systemctl restart network
 
-test_conn=$(ping -q -t 5 -w1 -c1 192.168.0.5 && grep "100% packet loss")
+test_conn=$(ping -q -t 5 -w1 -c1 192.168.0.5 | grep "100% packet loss")
 if [[ -z "$test_conn" ]]; then
 	echo "Red configurada con exito."
 else
