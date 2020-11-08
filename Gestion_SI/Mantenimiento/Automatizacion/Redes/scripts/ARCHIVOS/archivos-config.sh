@@ -41,12 +41,21 @@ if [[ -z "$test_conn" ]]; then
 else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores comunicandose con el servidor de respaldos. Verifique que el servidor de respaldos esté encendido y que haya sido configurado." >> /logs/resultados_scripts.log ; exit
 fi
+iptables -P INPUT ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -F
+
 yum clean all
 echo "Instalando git, wget ssh, rsync, expect, crontab."; yum install -q -y expect git openssh-server openssh-clients sshpass rsync crontab httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 
 echo "Instalando MySQL"
 rm -Rf /var/lib/mysql &>/dev/null #en caso de que ya haya una instalacion borro los datos y desinstalo
 yum remove MariaDB-server -qy &>/dev/null
+service mysql stop &>/dev/null
+killall -9 mysqld &>/dev/null
+rm -rf /etc/mysql &>/dev/null
+rm -rf /var/lib/mysql &>/dev/null
 #mysql 8 solo funciona sobre arquitectura de 32 bits por lo que tengo que recurrir a mariadb.
 #no existen paquetes para CentOS 7 de 32 bits pero si para centos 6.
 
