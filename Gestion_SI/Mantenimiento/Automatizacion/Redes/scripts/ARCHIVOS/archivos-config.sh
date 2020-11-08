@@ -61,10 +61,8 @@ echo 'gpgcheck=1'
 } > /etc/yum.repos.d/mariadb.org.repo
 
 yum install -y MariaDB-server && echo "Mysql instalado con exito"
-service mysql start
+service mysql start && echo "Iniciando configuracion automatica de mysql" ; ./mysql.exp && "Con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo un error configurando mysql de manera automatica, el script seguira corriendo pero debera configurarlo manualmente luego." > /logs/resultados_scripts.log ; exit)
 #la instalacion de mysql fue automatizada con autoexpect, posteriormente si el administrador quisiera hacerla lo puede hacer desde el menu principal, pero a mi me pidieron automatizar asi que automatizamos.
-echo "Iniciando configuracion automatica de mysql"
-./mysql.exp && "Con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo un error configurando mysql de manera automatica, el script seguira corriendo pero debera configurarlo manualmente luego." > /logs/resultados_scripts.log ; exit)
 
 service sshd start
 service httpd start
