@@ -62,7 +62,7 @@ AuthorizedKeysFile	.ssh/authorized_keys
 # To disable tunneled clear text passwords, change to no here!
 #PasswordAuthentication no
 #PermitEmptyPasswords no
-PasswordAuthentication si
+PasswordAuthentication yes #necesito que por defecto quede asi para que el script de automatizacion del servidor principal pueda usar sshcopy id
 # Change to no to disable s/key passwords
 #ChallengeResponseAuthentication yes
 ChallengeResponseAuthentication no
