@@ -27,11 +27,9 @@ while read -r u || [[ $u ]]; do
 	
 	IFS=" "
 	for g in $grouplist
-	do	
-		if [ $(grep -w "$grupo" /etc/group | grep -w "$_user" | wc -l ) -eq 0 ]; then	
-			usermod -a -G "$g" "$user"
-			echo "agregando usuario $user a grupo $g"
-		fi	
+	do		
+	        echo "agregando usuario $user a grupo $g"
+		usermod -a -G "$g" "$user"
 	done
 	IFS=$default_ifs
 done < $ulist
