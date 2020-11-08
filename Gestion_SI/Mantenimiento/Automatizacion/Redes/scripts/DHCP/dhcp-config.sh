@@ -9,8 +9,7 @@ if  [ -n "$FOUND" ] ; then
 	echo "Adaptador(es) de red detectados: "
         echo $FOUND
 else
-	echo "No se encontraron adaptadores de red :(. Hace el favor de conectar el cable Ethernet."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): No se encontraron adaptadores de red :(. Hace el favor de conectar el cable Ethernet." >> /logs/resultados_scripts.log ; exit
 fi
 
 mi_interfaz="Mantenimiento/Automatizacion/Redes/configs/DHCP/interface" #archivo preconfigurado de la interfaz
@@ -32,39 +31,11 @@ ifdown $interfaz
 ifup $interfaz
 systemctl restart network
 
-#VERIFICAR SI TENGO INTERNET
-test_conn=$(ping -c1 192.168.0.253 | grep "100% packet loss")
-if [[ -z "$test_conn" ]]; then
-	echo "Red configurada con exito."
-else
-	echo "Hubieron errores configurando la red."
-	exit
-fi
-
 echo "Limpiando cache..."; yum clean all &>/dev/null #borrar cache paquetes y demas para evitar conflictos
-echo "Instalando FirewallD..."; yum install -q -y firewalld &>/dev/null
-echo "Instalando DHCP..."; yum install -q -y dhcp &>/dev/null
+echo "Instalando FirewallD y dhcpd"; yum install -q -y firewalld dhcpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 
 #cambiar hostname
 hostnamectl set-hostname --static "DHCP"
-
-_ip=$(ip a | grep $interfaz | grep -w "inet" | cut -d "/" -f1 | tr 'inet' ' ' | tr -d ' ')
-
-octeto_1=$(echo $_ip | cut -d "." -f1)
-
-octeto_2=$(echo $_ip | cut -d "." -f2)
-
-octeto_3=$(echo $_ip | cut -d "." -f3)
-
-octeto_4=$(echo $_ip | cut -d "." -f4)
-
-subred_1=$("$octeto_1.$octeto_2.$octeto_3.0")
-mask=255.255.255.0
-brd=$(ip a | grep "$interfaz" | grep -w "inet" | awk -F 'brd' '{print $2}' | echo $brd | cut -d " " -f1)
-gateway="192.168.0.1"
-primer_host="192.168.0.101"
-ultimo_host="192.168.0.201"
-
 
 systemctl start dhcp
 systemctl enable dhcp
@@ -72,21 +43,17 @@ firewall-cmd --zone=public --add-port=53/tcp --permanent
 systemctl start firewalld
 systemctl enable firewalld
 
-named_status=$(systemctl show -p ActiveState named | cut -d "=" -f2)
+dhcpd_status=$(systemctl show -p ActiveState "dhcpd" | cut -d "=" -f2)
 
-if [ $named_status = "active" ]; then
-	echo "Configurado BIND DNS con éxito."
+if [ $dhcpd_status = "active" ]; then
+	echo "Instalado dhcpd con éxito."
 else
-	echo "Hubieron errores configurando el servicio DNS."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores configurando dhcpd." >> /logs/resultados_scripts.log ; exit
 fi
 
 firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
 if [ $firewalld_status = "active" ]; then
 	echo "Agregada regla al firewall para el servicio DHCP."
 else
-	echo "Hubieron errores configurando el firewall."
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores configurando el firewall" >> /logs/resultados_scripts.log ; exit
 fi
-
-
-
