@@ -17,18 +17,24 @@ do
 	case "$opciony" in 
 		"1")
 			clear
-			./Mantenimiento/Automatizacion/scripts_cron/backup_home.sh
-			./Mantenimiento/Automatizacion/scripts_cron/backup_etc.sh
+			cp -R /Mantenimiento/Automatizacion/scripts_cron /var/
+			cd /
+			./var/scripts_cron/backup_home.sh "MANUAL"
+			./var/scripts_cron/backup_etc.sh "MANUAL"
 			;;
 
 		"2")
 			clear
-			./Mantenimiento/Automatizacion/scripts_cron/backup_home.sh
+			cp -R /Mantenimiento/Automatizacion/scripts_cron /var/
+			cd /
+			./var/scripts_cron/backup_home.sh "MANUAL"
 			;;
 
 		"3")
 			clear
-			./Mantenimiento/Automatizacion/scripts_cron/backup_etc.sh
+			cp -R /Mantenimiento/Automatizacion/scripts_cron /var/
+			cd /
+			./var/scripts_cron/backup_etc.sh "MANUAL"
 			;;
 		"0")
 			clear
