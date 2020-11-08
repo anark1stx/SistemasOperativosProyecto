@@ -61,6 +61,9 @@ systemctl enable firewalld
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
+#genero clave ssh, 
+su admin -c "yes '' | ssh-keygen -N '' >&- 2>&-"
+
 cat $mi_ssh > /etc/ssh/sshd_config
 sudo firewall-cmd --add-port=49555/tcp --permanent
 sudo firewall-cmd --remove-port=22/tcp
