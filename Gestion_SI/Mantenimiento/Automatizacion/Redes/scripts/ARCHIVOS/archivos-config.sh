@@ -33,7 +33,7 @@ echo "NETWORKING=yes" > /etc/sysconfig/network
 echo "HOSTNAME=ARCHIVOS" >> /etc/sysconfig/network
 ifdown $interfaz
 ifup $interfaz
-service restart network
+service network restart
 
 test_conn=$(ping -q -t 5 -w1 -c1 192.168.0.5 | grep "100% packet loss")
 if [[ -z "$test_conn" ]]; then
