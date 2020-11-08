@@ -22,7 +22,7 @@ ifdown $interfaz
 ifup $interfaz
 
 #reinicio servicio
-systemctl restart network
+service network restart
 
 sed -i "/DEVICE=/c DEVICE=\"$interfaz\"" $mi_interfaz
 sed -i "/NAME=/c NAME=\"$interfaz\"" $mi_interfaz
@@ -34,30 +34,30 @@ ifdown $interfaz
 ifup $interfaz
 systemctl restart network
 
-echo "Instalando git, ssh, rsync y firewalld."; yum install -q -y git openssh-server openssh-clients sshpass rsync firewalld &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
+echo "Instalando git, ssh, rsync."; yum install -q -y git openssh-server openssh-clients sshpass rsync &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 
-systemctl start sshd
-systemctl start firewalld
+service sshd start
+service httpd start
 
-sshd_status=$(systemctl show -p ActiveState sshd | cut -d "=" -f2)
+sshd_status=$(service sshd status | grep "ERROR")
 
-if [[ $sshd_status = "active"  ]]; then
+if [[ -z "$sshd_status" ]]; then
 	echo "SSH instalado correctamente"
 else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando SSH." >> /logs/resultados_scripts.log ; exit
 fi
 
-firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
+chkconfig --add sshd
+chkconfig sshd on
 
-if [[ $firewalld_status = "active"  ]]; then
-	echo "Firewalld instalado correctamente"
-else
-	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Firewalld." >> /logs/resultados_scripts.log ; exit
-	exit
-fi
+iptables -A INPUT -i lo -j ACCEPT #trafico de la loopback (localhost)
+iptables -A INPUT -p tcp --destination-port 22 -j DROP
+iptables -A INPUT -p tcp -m tcp --dport 49555 -j ACCEPT
 
-systemctl enable sshd
-systemctl enable firewalld
+service sshd restart
+
+service iptables save
+service iptables restart
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
@@ -65,10 +65,6 @@ sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabil
 su admin -c "yes '' | ssh-keygen -N '' >&- 2>&-"
 
 cat $mi_ssh > /etc/ssh/sshd_config
-sudo firewall-cmd --add-port=49555/tcp --permanent
-sudo firewall-cmd --remove-port=22/tcp
-systemctl restart sshd
-firewall-cmd --reload
 
 echo "Creando e inicializando directorios de respaldos " 
 mkdir -p /backup/SIBIM-BDS
