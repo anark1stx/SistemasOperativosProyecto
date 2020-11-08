@@ -10,8 +10,7 @@ if  [ -n "$FOUND" ] ; then
 	echo "Adaptador(es) de red detectados: "
         echo $FOUND
 else
-	echo "No se encontraron adaptadores de red :(. Hace el favor de conectar el cable Ethernet."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): No se encontraron adaptadores de red :(. Hace el favor de conectar el cable Ethernet." >> /logs/resultados_scripts.log ; exit
 fi
 
 interfaz=$(ip a show | cut -d ' ' -f 2 | grep -v "lo" | sed '/^[[:space:]]*$/d' | head -n 1 | tr -d ':' ) #conseguimos el nombre de la interfaz
@@ -33,15 +32,7 @@ ifdown $interfaz
 ifup $interfaz
 systemctl restart network
 
-test_conn=$(ping -q -t 5 -w1 -c1 192.168.0.4 && grep "100% packet loss")
-if [[ -z "$test_conn" ]]; then
-	echo "Red configurada con exito."
-else
-	echo "Hubieron errores comunicandose con el servidor de archivos."
-	exit
-fi
-
-echo "Instalando firewalld, postfix y dovecot"; yum install -q -y postfix dovecot &>/dev/null && echo "paquetes instalados con exito, puede proceder con su instalacion" || echo "Hubo errores instalando los paquetes"; exit
+echo "Instalando firewalld, postfix y dovecot"; yum install -q -y postfix dovecot &>/dev/null&& echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 systemctl start firewalld
 
 firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
@@ -49,8 +40,7 @@ firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
 if [[ $firewalld_status = "active"  ]]; then
 	echo "Firewalld instalado correctamente"
 else
-	echo "Hubieron errores instalando Firewalld."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Firewalld." >> /logs/resultados_scripts.log ; exit
 fi
 
 systemctl enable firewalld
@@ -65,8 +55,7 @@ postfix_status=$(systemctl show -p ActiveState postfix | cut -d "=" -f2)
 if [[ $postfix_status = "active"  ]]; then
 	echo "Postfix instalado correctamente"
 else
-	echo "Hubieron errores instalando Postfix."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Postfix." >> /logs/resultados_scripts.log ; exit
 fi
 
 dovecot_status=$(systemctl show -p ActiveState dovecot | cut -d "=" -f2)
@@ -74,8 +63,7 @@ dovecot_status=$(systemctl show -p ActiveState dovecot | cut -d "=" -f2)
 if [[ $dovecot_status = "active"  ]]; then
 	echo "Dovecot instalado correctamente"
 else
-	echo "Hubieron errores instalando Dovecot."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Dovecot." >> /logs/resultados_scripts.log ; exit
 fi
 
 systemctl enable postfix
