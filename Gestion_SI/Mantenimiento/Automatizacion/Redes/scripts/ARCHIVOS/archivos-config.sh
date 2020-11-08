@@ -18,12 +18,12 @@ fi
 
 interfaz=$(ip a show | cut -d ' ' -f 2 | grep -v "lo" | sed '/^[[:space:]]*$/d' | head -n 1 | tr -d ':' ) #conseguimos el nombre de la interfaz
 
+#reinicio servicio
+service network restart
+
 #rehago el symlink de la interfaz
 ifdown $interfaz 
 ifup $interfaz
-
-#reinicio servicio
-service network restart
 
 sed -i "/DEVICE=/c DEVICE=\"$interfaz\"" $mi_interfaz
 sed -i "/NAME=/c NAME=\"$interfaz\"" $mi_interfaz
@@ -33,7 +33,7 @@ hostnamectl set-hostname --static "ARCHIVOS"
 
 ifdown $interfaz
 ifup $interfaz
-systemctl restart network
+service restart network
 
 test_conn=$(ping -q -t 5 -w1 -c1 192.168.0.5 | grep "100% packet loss")
 if [[ -z "$test_conn" ]]; then
