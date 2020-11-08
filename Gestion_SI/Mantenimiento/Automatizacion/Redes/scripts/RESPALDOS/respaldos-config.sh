@@ -17,12 +17,12 @@ fi
 
 interfaz=$(ip a show | cut -d ' ' -f 2 | grep -v "lo" | sed '/^[[:space:]]*$/d' | head -n 1 | tr -d ':' ) #conseguimos el nombre de la interfaz
 
+#reinicio servicio
+service network restart
+
 #rehago el symlink de la interfaz
 ifdown $interfaz 
 ifup $interfaz
-
-#reinicio servicio
-service network restart
 
 sed -i "/DEVICE=/c DEVICE=\"$interfaz\"" $mi_interfaz
 sed -i "/NAME=/c NAME=\"$interfaz\"" $mi_interfaz
@@ -34,7 +34,7 @@ echo "HOSTNAME=RESPALDO" >> /etc/sysconfig/network
 
 ifdown $interfaz
 ifup $interfaz
-systemctl restart network
+service network restart
 
 echo "Instalando git, ssh, rsync."; yum install -q -y git openssh-server openssh-clients sshpass rsync &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 
