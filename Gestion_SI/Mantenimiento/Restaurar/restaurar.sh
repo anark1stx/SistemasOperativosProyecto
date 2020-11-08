@@ -9,7 +9,6 @@ do
 	echo "|								|"
 	echo "|1- Restaurar Linux					|"
 	echo "|2- Restaurar MySQL					|"
-	echo "|3- Restaurar configuración de red			|"
 	echo "|0- Salir							|"
 	echo "----------------------------------------------------------------"
 	read -p "> " opcionz
