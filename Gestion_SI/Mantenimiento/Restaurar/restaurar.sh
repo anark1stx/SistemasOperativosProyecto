@@ -7,10 +7,9 @@ do
 	echo "----------------------------------------------------------------"
 	echo "|		Menu de restauración 			        |"
 	echo "|								|"
-	echo "|1- Restaurar Linux							|"
-	echo "|2- Restaurar MySQL							|"
-	#HACER MENU PARA RESTAURACION DE RED
-	echo "|3- Restaurar configuración de red					|"
+	echo "|1- Restaurar Linux					|"
+	echo "|2- Restaurar MySQL					|"
+	echo "|3- Restaurar configuración de red			|"
 	echo "|0- Salir							|"
 	echo "----------------------------------------------------------------"
 	read -p "> " opcionz
