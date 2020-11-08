@@ -75,3 +75,5 @@ mkdir -p /backup/SIBIM-BDS
 mkdir -p /backup/Linux
 cd /backup/Linux && git init #repositorio con archivos del sistema, /etc, /home
 cd /backup/SIBIM-BDS && git init #repositorio para sibim y mysql
+chown -R admin /backup
+chmod 755 /backup
