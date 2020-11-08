@@ -2,6 +2,8 @@
 #SCRIPT PARA AUTOMATIZAR LA CREACION Y ASIGNACION DE USUARIOS Y GRUPOS DEL PROYECTO
 #usuario:password:group1,group2,...group_n
 ulist="Mantenimiento/Automatizacion/UsuariosYGrupos/ulist.txt"
+. env.sh #exportar variable adminpwd
+./env.sh
 default_ifs=$IFS
 
 for gList in $(cat $ulist | cut -d ":" -f3)
@@ -33,4 +35,5 @@ while read -r u || [[ $u ]]; do
 	done
 	IFS=$default_ifs
 done < $ulist
+
 
