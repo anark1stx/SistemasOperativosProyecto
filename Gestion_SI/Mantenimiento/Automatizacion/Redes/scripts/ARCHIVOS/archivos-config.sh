@@ -42,7 +42,7 @@ else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores comunicandose con el servidor de respaldos. Verifique que el servidor de respaldos esté encendido y que haya sido configurado." >> /logs/resultados_scripts.log ; exit
 fi
 
-echo "Instalando mysql, git, ssh, rsync, crontab y firewalld."; yum install -q -y mysql-server git openssh-server openssh-clients sshpass rsync crontab firewalld httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
+echo "Instalando mysql, git, ssh, rsync, crontab y firewalld."; yum install -q -y mysql-server git openssh-server openssh-clients sshpass rsync crontab firewalld httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 
 systemctl start sshd
 systemctl start firewalld
