@@ -59,9 +59,8 @@ echo 'gpgcheck=1'
 
 yum install -y MariaDB-server
 service mysql start
-#la instalacion de mysql es automatizada con autoexpect.
-autoexpect ./mysql_secure_installation
-
+#la instalacion de mysql fue automatizada con autoexpect, posteriormente si el administrador quisiera hacerla lo puede hacer desde el menu principal, pero a mi me pidieron automatizar asi que automatizamos.
+./mysql.exp
 
 service sshd start
 service httpd start
@@ -102,7 +101,7 @@ sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabil
 
 #genero clave ssh, 
 su admin -c "yes '' | ssh-keygen -N '' >&- 2>&-"
-
+#automatizo copiado de clave SSH, por defecto el servidor de respaldos tiene permitido el ingreso de usuarios con contraseña, al final del script me conecto y desactivo eso en dicho servidor.
 copiar_id=$(su admin -c "sshpass -p$adminpwd ssh-copy-id admin@192.168.0.5 -p 49555" | grep "denied\|ERROR") #sshpass permite pasar la contrasena del usuario a ssh por stdin
 
 if [[ -n "$copiar_id"  ]]; then
@@ -134,3 +133,8 @@ cp -R Mantenimiento/Automatizacion/scripts_cron /var/
 cp mis_rutinas /var/mis_rutinas
 #asigno el archivo
 crontab -u root /var/mis_rutinas
+
+sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux
+
+ssh -i /home/admin/.ssh/id_rsa.pub admin@192.168.0.5 -p 49555 'sed -i "/PasswordAuthentication yes/c PasswordAuthentication no" /etc/ssh/sshd_config ; service sshd restart'
+#ya que copie la clave ssh deshabilito el ingreso con contraseña en ese servidor
