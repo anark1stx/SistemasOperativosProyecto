@@ -23,7 +23,7 @@ ifdown $interfaz
 ifup $interfaz
 
 #reinicio servicio
-systemctl restart network
+service network restart
 
 sed -i "/DEVICE=/c DEVICE=\"$interfaz\"" $mi_interfaz
 sed -i "/NAME=/c NAME=\"$interfaz\"" $mi_interfaz
@@ -42,7 +42,7 @@ else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores comunicandose con el servidor de respaldos. Verifique que el servidor de respaldos esté encendido y que haya sido configurado." >> /logs/resultados_scripts.log ; exit
 fi
 
-echo "Instalando mysql, git, wget ssh, rsync, expect, crontab y firewalld."; yum install -q -y expect git openssh-server openssh-clients sshpass rsync crontab firewalld httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
+echo "Instalando mysql, git, wget ssh, rsync, expect, crontab."; yum install -q -y expect git openssh-server openssh-clients sshpass rsync crontab httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 
 rm -Rf /var/lib/mysql &>/dev/null #en caso de que ya haya una instalacion borro los datos y desinstalo
 yum remove MariaDB-server -qy &>/dev/null
@@ -58,50 +58,45 @@ echo 'gpgcheck=1'
 } > /etc/yum.repos.d/mariadb.org.repo
 
 yum install -y MariaDB-server
-systemctl start mysql
+service mysql start
 #la instalacion de mysql es automatizada con autoexpect.
 autoexpect ./mysql_secure_installation
 
 
-systemctl start sshd
-systemctl start firewalld
-systemctl start httpd
+service sshd start
+service httpd start
 
-sshd_status=$(systemctl show -p ActiveState sshd | cut -d "=" -f2)
+sshd_status=$(service mysql status | grep "ERROR")
 
-if [[ $sshd_status = "active"  ]]; then
+if [[ -z "$sshd_status" ]]; then
 	echo "SSH instalado correctamente"
 else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando SSH." >> /logs/resultados_scripts.log ; exit
 fi
 
-firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
+apache_status=$(service httpd status | grep "ERROR")
 
-if [[ $firewalld_status = "active"  ]]; then
-	echo "Firewalld instalado correctamente"
-else
-	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Firewalld." >> /logs/resultados_scripts.log ; exit
-fi
-
-apache_status=$(systemctl show -p ActiveState httpd | cut -d "=" -f2)
-
-if [[ $apache_status = "active"  ]]; then
+if [[ -z "$apache_status" ]]; then
 	echo "Apache instalado correctamente"
 else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Apache." >> /logs/resultados_scripts.log ; exit
 fi
 
-mysql_status=$(systemctl show -p ActiveState mariadb | cut -d "=" -f2)
+mysql_status=$(service mysql status | grep "ERROR")
 
-if [[ $mysql_status = "active"  ]]; then
+if [[ -z "$mysql_status" ]]; then
 	echo "MySQL instalado correctamente"
 else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando mysql." >> /logs/resultados_scripts.log ; exit
 fi
 
-systemctl enable sshd
-systemctl enable firewalld
-systemctl enable httpd
+chkconfig --add sshd
+chkconfig --add httpd
+chkconfig --add mysql
+
+chkconfig sshd on
+chkconfig httpd on
+chkconfig mysql on
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
@@ -112,17 +107,23 @@ copiar_id=$(su admin -c "sshpass -p$adminpwd ssh-copy-id admin@192.168.0.5 -p 49
 
 if [[ -n "$copiar_id"  ]]; then
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): No se pudo establecer comunicacion con el servidor de respaldos, verifique que este encendido y que haya sido configurado." >> /logs/resultados_scripts.log ; exit
+else
+	echo "Conexion con servidor de respaldos establecida con exito, copiada clave SSH del usuario admin"
 fi
 
 cat $mi_ssh > /etc/ssh/sshd_config
 
-firewall-cmd --permanent --zone=public --add-service=http
-firewall-cmd --permanent --zone=public --add-service=https #si tuvieramos pagina web sería buena idea tener un certificado SSL y https
-sudo firewall-cmd --add-port=3306/tcp --permanent
-sudo firewall-cmd --add-port=49555/tcp --permanent
-sudo firewall-cmd --remove-port=22/tcp
-systemctl restart sshd
-firewall-cmd --reload
+iptables -A INPUT -i lo -j ACCEPT #trafico de la loopback (localhost)
+iptables -A INPUT -p tcp --destination-port 22 -j DROP
+iptables -A INPUT -p tcp -m tcp --dport 49555 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 3306 -j ACCEPT
+
+service sshd restart
+
+service iptables save
+service iptables restart
+
 #este archivo guarda las credenciales y cada vez que efectuo mysqldump no tengo que especificar contrasena.
 cp .my.cnf /home/admin/.my.cnf
 chown admin /home/admin/.my.cnf
