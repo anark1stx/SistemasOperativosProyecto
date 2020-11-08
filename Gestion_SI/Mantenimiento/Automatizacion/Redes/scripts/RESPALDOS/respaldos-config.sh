@@ -67,6 +67,8 @@ sudo firewall-cmd --remove-port=22/tcp
 systemctl restart sshd
 firewall-cmd --reload
 
-echo "Creando e inicializando directorios de respaldos " ; mkdir /backup && mkdir /backup/SIBIM-BDS && mkdir /backup/Linux
+echo "Creando e inicializando directorios de respaldos " 
+mkdir -p /backup/SIBIM-BDS
+mkdir -p /backup/Linux
 cd /backup/Linux && git init #repositorio con archivos del sistema, /etc, /home
 cd /backup/SIBIM-BDS && git init #repositorio para sibim y mysql
