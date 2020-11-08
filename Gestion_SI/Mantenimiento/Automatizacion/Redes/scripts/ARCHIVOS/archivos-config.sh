@@ -82,8 +82,8 @@ systemctl enable httpd
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
-#genero clave ssh
-su admin -c cat /dev/zero | ssh-keygen -q -N ""
+#genero clave ssh, 
+su admin -c 'yes "" | ssh-keygen -N "" >&- 2>&-'
 
 adminpwd=$(grep -w "admin" Mantenimiento/Automatizacion/UsuariosYGrupos/ulist.txt | cut -d ":" -f2)
 copiar_id=$(su admin -c sshpass -p "$adminpwd" ssh-copy-id "-p 49555" admin@192.168.0.5 | grep "denied\|ERROR") #sshpass permite pasar la contrasena del usuario a ssh por stdin
