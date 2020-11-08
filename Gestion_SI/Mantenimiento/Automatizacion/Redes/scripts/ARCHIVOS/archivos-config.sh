@@ -42,7 +42,26 @@ else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores comunicandose con el servidor de respaldos. Verifique que el servidor de respaldos esté encendido y que haya sido configurado." >> /logs/resultados_scripts.log ; exit
 fi
 
-echo "Instalando mysql, git, ssh, rsync, crontab y firewalld."; yum install -q -y mysql-server git openssh-server openssh-clients sshpass rsync crontab firewalld httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
+echo "Instalando mysql, git, wget ssh, rsync, expect, crontab y firewalld."; yum install -q -y expect git openssh-server openssh-clients sshpass rsync crontab firewalld httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
+
+rm -Rf /var/lib/mysql &>/dev/null #en caso de que ya haya una instalacion borro los datos y desinstalo
+yum remove MariaDB-server -qy &>/dev/null
+
+{
+echo '# MariaDB 10.3 CentOS repository list - created 2019-10-28 23:35 UTC'
+echo '# http://downloads.mariadb.org/mariadb/repositories/'
+echo '[mariadb]'
+echo 'name = MariaDB'
+echo 'baseurl = http://yum.mariadb.org/10.3/centos6-x86'
+echo 'gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB'
+echo 'gpgcheck=1'
+} > /etc/yum.repos.d/mariadb.org.repo
+
+yum install -y MariaDB-server
+systemctl start mysql
+#la instalacion de mysql es automatizada con autoexpect.
+autoexpect ./mysql_secure_installation
+
 
 systemctl start sshd
 systemctl start firewalld
@@ -69,12 +88,16 @@ apache_status=$(systemctl show -p ActiveState httpd | cut -d "=" -f2)
 if [[ $apache_status = "active"  ]]; then
 	echo "Apache instalado correctamente"
 else
-
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Apache." >> /logs/resultados_scripts.log ; exit
 fi
 
-firewall-cmd --permanent --zone=public --add-service=http
-sudo firewall-cmd --permanent --zone=public --add-service=https #si tuvieramos pagina web sería buena idea tener un certificado SSL y https
+mysql_status=$(systemctl show -p ActiveState mariadb | cut -d "=" -f2)
+
+if [[ $mysql_status = "active"  ]]; then
+	echo "MySQL instalado correctamente"
+else
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando mysql." >> /logs/resultados_scripts.log ; exit
+fi
 
 systemctl enable sshd
 systemctl enable firewalld
@@ -93,11 +116,13 @@ fi
 
 cat $mi_ssh > /etc/ssh/sshd_config
 
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --permanent --zone=public --add-service=https #si tuvieramos pagina web sería buena idea tener un certificado SSL y https
+sudo firewall-cmd --add-port=3306/tcp --permanent
 sudo firewall-cmd --add-port=49555/tcp --permanent
 sudo firewall-cmd --remove-port=22/tcp
 systemctl restart sshd
 firewall-cmd --reload
-
 #este archivo guarda las credenciales y cada vez que efectuo mysqldump no tengo que especificar contrasena.
 cp .my.cnf /home/admin/.my.cnf
 chown admin /home/admin/.my.cnf
