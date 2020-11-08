@@ -66,7 +66,7 @@ autoexpect ./mysql_secure_installation
 service sshd start
 service httpd start
 
-sshd_status=$(service mysql status | grep "ERROR")
+sshd_status=$(service sshd status | grep "ERROR")
 
 if [[ -z "$sshd_status" ]]; then
 	echo "SSH instalado correctamente"
