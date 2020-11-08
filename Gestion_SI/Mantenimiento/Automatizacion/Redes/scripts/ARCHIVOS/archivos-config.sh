@@ -126,8 +126,7 @@ iptables -A INPUT -p tcp -m tcp --dport 3306 -j ACCEPT
 
 service sshd restart
 
-service iptables save
-service iptables restart
+iptables-save
 
 #este archivo guarda las credenciales y cada vez que efectuo mysqldump no tengo que especificar contrasena.
 cp .my.cnf /home/admin/.my.cnf
