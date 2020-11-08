@@ -85,7 +85,6 @@ sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabil
 #genero clave ssh, 
 su admin -c "yes '' | ssh-keygen -N '' >&- 2>&-"
 
-adminpwd=$(grep -w "admin" Mantenimiento/Automatizacion/UsuariosYGrupos/ulist.txt | cut -d ":" -f2)
 copiar_id=$(su admin -c "sshpass -p$adminpwd ssh-copy-id admin@192.168.0.5 -p 49555" | grep "denied\|ERROR") #sshpass permite pasar la contrasena del usuario a ssh por stdin
 
 if [[ -n "$copiar_id"  ]]; then
