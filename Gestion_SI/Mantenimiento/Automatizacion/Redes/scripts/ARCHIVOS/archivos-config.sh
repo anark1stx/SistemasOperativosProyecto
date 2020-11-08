@@ -41,7 +41,7 @@ if [[ -z "$test_conn" ]]; then
 else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores comunicandose con el servidor de respaldos. Verifique que el servidor de respaldos esté encendido y que haya sido configurado." >> /logs/resultados_scripts.log ; exit
 fi
-
+yum clean all
 echo "Instalando git, wget ssh, rsync, expect, crontab."; yum install -q -y expect git openssh-server openssh-clients sshpass rsync crontab httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 
 echo "Instalando MySQL"
