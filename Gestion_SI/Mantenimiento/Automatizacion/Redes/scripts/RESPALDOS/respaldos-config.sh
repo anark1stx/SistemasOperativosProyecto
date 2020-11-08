@@ -3,7 +3,7 @@
 #ESTE SCRIPT NO DEBE SER EJECUTADO DIRECTAMENTE, ABRIR DESDE EL MENU PRINCIPAL.
 #NOTA: en caso de estar usando un servicio virtualizado, el gateway del adaptador de red de la PC en la que esté corriendo esta máquina debe cambiarse a la especificada en la carpeta (192.168.0.1).
 
-./Mantenimiento/Automatizacion/UsuariosYGrupos/main.sh && echo "usuarios y grupos creados con exito." || echo "$(date '+%d/%m/%Y %H:%M:%S'): error creando grupos y usuarios, abortando" ; exit 
+./Mantenimiento/Automatizacion/UsuariosYGrupos/main.sh && echo "usuarios y grupos creados con exito." || (echo "$(date '+%d/%m/%Y %H:%M:%S'): error creando grupos y usuarios, abortando" >> /logs/resultados_scripts.log ; exit) 
 
 mi_interfaz="Mantenimiento/Automatizacion/Redes/configs/RESPALDOS/interface" #archivo preconfigurado de la interfaz
 FOUND=$(cat /proc/net/dev | grep -v "lo" | grep ":") #verificar que haya conectado algun adaptador de red
@@ -12,8 +12,7 @@ if  [ -n "$FOUND" ] ; then
 	echo "Adaptador(es) de red detectados: "
         echo $FOUND
 else
-	echo "No se encontraron adaptadores de red :(. Hace el favor de conectar el cable Ethernet."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): No se encontraron adaptadores de red :(. Hace el favor de conectar el cable Ethernet." >> /logs/resultados_scripts.log ; exit 
 fi
 
 interfaz=$(ip a show | cut -d ' ' -f 2 | grep -v "lo" | sed '/^[[:space:]]*$/d' | head -n 1 | tr -d ':' ) #conseguimos el nombre de la interfaz
@@ -45,8 +44,7 @@ sshd_status=$(systemctl show -p ActiveState sshd | cut -d "=" -f2)
 if [[ $sshd_status = "active"  ]]; then
 	echo "SSH instalado correctamente"
 else
-	echo "Hubieron errores instalando SSH."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando SSH." >> /logs/resultados_scripts.log ; exit
 fi
 
 firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
@@ -54,7 +52,7 @@ firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
 if [[ $firewalld_status = "active"  ]]; then
 	echo "Firewalld instalado correctamente"
 else
-	echo "Hubieron errores instalando Firewalld."
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Firewalld." >> /logs/resultados_scripts.log ; exit
 	exit
 fi
 
@@ -69,7 +67,6 @@ sudo firewall-cmd --remove-port=22/tcp
 systemctl restart sshd
 firewall-cmd --reload
 
-mkdir /backup && mkdir /backup/SIBIM-BDS && mkdir /backup/Linux
-cd /backup/Linux && git init
-cd /backup/SIBIM-BDS && git init
-chown -R admin /backup
+echo "Creando e inicializando directorios de respaldos " ; mkdir /backup && mkdir /backup/SIBIM-BDS && mkdir /backup/Linux
+cd /backup/Linux && git init #repositorio con archivos del sistema, /etc, /home
+cd /backup/SIBIM-BDS && git init #repositorio para sibim y mysql
