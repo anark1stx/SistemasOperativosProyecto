@@ -17,49 +17,47 @@ fi
 
 interfaz=$(ip a show | cut -d ' ' -f 2 | grep -v "lo" | sed '/^[[:space:]]*$/d' | head -n 1 | tr -d ':' ) #conseguimos el nombre de la interfaz
 
-#reinicio servicio
-service network restart
-
 #rehago el symlink de la interfaz
 ifdown $interfaz 
 ifup $interfaz
+
+#reinicio servicio
+systemctl restart network
 
 sed -i "/DEVICE=/c DEVICE=\"$interfaz\"" $mi_interfaz
 sed -i "/NAME=/c NAME=\"$interfaz\"" $mi_interfaz
 
 cat $mi_interfaz > /etc/sysconfig/network-scripts/ifcfg-$interfaz #sobreescribir el archivo
-echo "" > /etc/sysconfig/network
-echo "NETWORKING=yes" >> /etc/sysconfig/network
-echo "HOSTNAME=RESPALDO" >> /etc/sysconfig/network
+hostnamectl set-hostname --static "RESPALDO"
 
 ifdown $interfaz
 ifup $interfaz
-service network restart
+systemctl restart network
 
-echo "Instalando git, ssh, rsync."; yum install -q -y git openssh-server openssh-clients sshpass rsync &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
+echo "Instalando git, ssh, rsync y firewalld."; yum install -q -y git openssh-server openssh-clients sshpass rsync firewalld &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 
-service sshd start
-service httpd start
+systemctl start sshd
+systemctl start firewalld
 
-sshd_status=$(service sshd status | grep "ERROR")
+sshd_status=$(systemctl show -p ActiveState sshd | cut -d "=" -f2)
 
-if [[ -z "$sshd_status" ]]; then
+if [[ $sshd_status = "active"  ]]; then
 	echo "SSH instalado correctamente"
 else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando SSH." >> /logs/resultados_scripts.log ; exit
 fi
 
-chkconfig --add sshd
-chkconfig sshd on
+firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
 
-iptables -A INPUT -i lo -j ACCEPT #trafico de la loopback (localhost)
-iptables -A INPUT -p tcp --destination-port 22 -j DROP
-iptables -A INPUT -p tcp -m tcp --dport 49555 -j ACCEPT
+if [[ $firewalld_status = "active"  ]]; then
+	echo "Firewalld instalado correctamente"
+else
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Firewalld." >> /logs/resultados_scripts.log ; exit
+	exit
+fi
 
-service sshd restart
-
-service iptables save
-service iptables restart
+systemctl enable sshd
+systemctl enable firewalld
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
@@ -67,6 +65,10 @@ sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabil
 su admin -c "yes '' | ssh-keygen -N '' >&- 2>&-"
 
 cat $mi_ssh > /etc/ssh/sshd_config
+sudo firewall-cmd --add-port=49555/tcp --permanent
+sudo firewall-cmd --remove-port=22/tcp
+systemctl restart sshd
+firewall-cmd --reload
 
 echo "Creando e inicializando directorios de respaldos " 
 mkdir -p /backup/SIBIM-BDS
