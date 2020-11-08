@@ -1,3 +1,4 @@
+ONBOOT=yes
 TYPE="Ethernet"
 PROXY_METHOD="none"
 BROWSER_ONLY="no"
@@ -6,7 +7,6 @@ DEFROUTE="yes"
 PEERDNS="yes"
 IPV4_FAILURE_FATAL="no"
 NAME="enp0s3"
-UUID="1e930118-7bb3-4bab-a981-c5e68f746737"
 DEVICE="enp0s3"
 ONBOOT="yes"
 IPADDR=192.168.0.4
