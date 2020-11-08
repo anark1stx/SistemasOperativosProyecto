@@ -32,7 +32,7 @@ do
 
 		"4")
 			clear
-			./Mantenimiento/Automatizacion/Redes/scripts/RESPALDO/respaldo-config.sh
+			./Mantenimiento/Automatizacion/Redes/scripts/RESPALDOS/respaldos-config.sh
 			;;
 		"0")
 			clear
