@@ -1,8 +1,7 @@
 #!/bin/bash
 #SCRIPT PARA AUTOMATIZAR LA CREACION Y ASIGNACION DE USUARIOS Y GRUPOS DEL PROYECTO
 #usuario:password:group1,group2,...group_n
-#ulist="Mantenimiento/Automatizacion/UsuariosYGrupos/ulist.txt"
-ulist="ulist.txt"
+ulist="Mantenimiento/Automatizacion/UsuariosYGrupos/ulist.txt"
 default_ifs=$IFS
 
 for gList in $(cat $ulist | cut -d ":" -f3)
