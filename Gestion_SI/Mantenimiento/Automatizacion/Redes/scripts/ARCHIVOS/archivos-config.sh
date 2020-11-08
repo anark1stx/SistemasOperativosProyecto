@@ -29,8 +29,8 @@ sed -i "/DEVICE=/c DEVICE=\"$interfaz\"" $mi_interfaz
 sed -i "/NAME=/c NAME=\"$interfaz\"" $mi_interfaz
 
 cat $mi_interfaz > /etc/sysconfig/network-scripts/ifcfg-$interfaz #sobreescribir el archivo
-hostnamectl set-hostname --static "ARCHIVOS"
-
+echo "NETWORKING=yes" > /etc/sysconfig/network
+echo "HOSTNAME=ARCHIVOS" >> /etc/sysconfig/network
 ifdown $interfaz
 ifup $interfaz
 service restart network
