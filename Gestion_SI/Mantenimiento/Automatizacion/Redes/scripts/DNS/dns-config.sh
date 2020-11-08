@@ -9,14 +9,10 @@ if  [ -n "$FOUND" ] ; then
 	echo "Adaptador(es) de red detectados: "
         echo $FOUND
 else
-	echo "No se encontraron adaptadores de red :(. Hace el favor de conectar el cable Ethernet."
-	exit
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): No se encontraron adaptadores de red :(. Hace el favor de conectar el cable Ethernet." >> /logs/resultados_scripts.log ; exit
 fi
 
 mi_interfaz="Mantenimiento/Automatizacion/Redes/configs/DNS/interface" #archivo preconfigurado de la interfaz
-forward="Mantenimiento/Automatizacion/Redes/configs/DNS/forward.overclode.sibim" #zona forward
-reverse="Mantenimiento/Automatizacion/Redes/configs/DNS/reverse.overclode.sibim" #zona reverse
-namedconf="Mantenimiento/Automatizacion/Redes/configs/DNS/named.conf"
 interfaz=$(ip a show | cut -d ' ' -f 2 | grep -v "lo"| sed '/^[[:space:]]*$/d' | head -n 1 | tr -d ':' ) #conseguimos el nombre de la interfaz
 
 #rehago el symlink de la interfaz
@@ -25,7 +21,6 @@ ifup $interfaz
 
 #reinicio servicio
 systemctl restart network
-
 
 sed -i "/DEVICE=/c DEVICE=\"$interfaz\"" $mi_interfaz
 sed -i "/NAME=/c NAME=\"$interfaz\"" $mi_interfaz
@@ -36,26 +31,11 @@ ifdown $interfaz
 ifup $interfaz
 systemctl restart network
 
-#VERIFICAR SI TENGO INTERNET
-test_conn=$(ping -c1 www.google.com | grep "100% packet loss")
-if [[ -z "$test_conn" ]]; then
-	echo "Red configurada con exito."
-else
-	echo "Hubieron errores configurando la red."
-	exit
-fi
-
-
 echo "Limpiando cache..."; yum clean all &>/dev/null #borrar cache paquetes y demas para evitar conflictos
-echo "Instalando FirewallD..."; yum install -q -y firewalld &>/dev/null
-echo "Instalando BIND..."; yum install -q -y bind* &>/dev/null #instalar librerias de BIND
+echo "Instalando FirewallD y BIND"; yum install -q -y firewalld bind* &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 
 #cambiar hostname
-hostnamectl set-hostname --static "OVERCLODE"
-
-echo $namedconf > /etc/named.conf
-cp $forward /var/named/
-cp $reverse /var/named/
+hostnamectl set-hostname --static "NS1"
 
 echo "OPTIONS=-"4"" >> /etc/sysconfig/named #para indicar que estamos usando IPv4
 
@@ -80,6 +60,3 @@ if [ $firewalld_status = "active" ]; then
 else
 	echo "Hubieron errores configurando el firewall."
 fi
-
-
-
