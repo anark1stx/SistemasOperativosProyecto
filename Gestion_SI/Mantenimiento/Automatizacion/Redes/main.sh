@@ -9,8 +9,10 @@ do
 	echo "|							|"
 	echo "|1- Configurar como servidor DNS			|"
 	echo "|2- Configurar como servidor DHCP			|"
-	echo "|3- Configurar como servidor principal			|"
+	echo "|3- Configurar como servidor principal		|"
 	echo "|4- Configurar como servidor de respaldos		|"
+	echo "|5- Configurar como servidor de mail		|"
+	echo "|6- Configurar como servidor de monitoreo		|"
 	echo "|0- Salir						|"
 	echo "--------------------------------------------------------"
 	read -p "> " opciont
@@ -33,6 +35,14 @@ do
 		"4")
 			clear
 			./Mantenimiento/Automatizacion/Redes/scripts/RESPALDOS/respaldos-config.sh
+			;;
+		"5")
+			clear
+			./Mantenimiento/Automatizacion/Redes/scripts/MAIL/mail-config.sh
+			;;
+		"6")
+			clear
+			./Mantenimiento/Automatizacion/Redes/scripts/MAIL/monitoreo-config.sh
 			;;
 		"0")
 			clear
