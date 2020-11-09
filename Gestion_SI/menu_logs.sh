@@ -36,12 +36,12 @@ do
 		"5")
 			clear
      			read -p "Ingrese la fecha y/u hora (Formato: Nov 9 03:32): " fecha
-			cat /var/log/secure | grep $fecha
+			grep "$fecha" /var/log/secure
 			;;
     		"6")
 			clear
       			read -p "Ingrese el nombre del servicio a buscar: " sv
-			cat /var/log/secure | grep $sv
+			grep $sv /var/log/secure
 			;;
 		"0")
 			clear
