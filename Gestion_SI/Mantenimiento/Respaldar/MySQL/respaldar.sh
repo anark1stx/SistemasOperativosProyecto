@@ -8,26 +8,13 @@ do
 	echo "----------------------------------------------------------------"
 	echo "|		Menu de respaldos 			        |"
 	echo "|								|"
-	echo "|1- Respaldar todas las bases de datos			|"
-	echo "|2- Respaldar base de datos SIBIM				|"
-	echo "|3- Respaldar base de datos MySQL				|"
+	echo "|1- Respaldar bases de datos sibim y mysql		|"
 	echo "|0- Salir							|"
 	echo "----------------------------------------------------------------"
 	read -p "> " opciont
 
 	case "$opciont" in 
 		"1")
-			clear
-			./var/scripts_cron/backup_sibim.sh "MANUAL"
-			./var/scripts_cron/backup_mysql.sh "MANUAL"
-			;;
-
-		"2")
-			clear
-			./var/scripts_cron/backup_sibim.sh "MANUAL"
-			;;
-
-		"3")
 			clear
 			./var/scripts_cron/backup_mysql.sh "MANUAL"
 			;;
