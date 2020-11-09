@@ -44,10 +44,14 @@ fi
 
 echo "Instalando paquetes snmp y firewalld"; yum install -q -y net-snmp net-snmp-utils firewalld &>/dev/null && echo "paquetes SNMP y firewalld instalados con exito" || echo "Hubo errores instalando los paquetes"; exit
 systemctl start firewalld
-echo "Instalando paquetes de Zabbix"
-rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/8/x86_64/zabbix-release-5.0-1.el8.noarch.rpm && echo "paquete de zabbix descargado" || echo "Hubo errores descargando el paquete de zabbix."; exit
-dnf clean all
-dnf install zabbix-server-mysql zabbix-web-mysql zabbix-apache-conf zabbix-agent && echo "Instalado con exito, puede proceder a configurarlo." || echo "Hubo errores instalando los paquetes"; exit
+#echo "Instalando paquetes de Zabbix"
+#rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/8/x86_64/zabbix-release-5.0-1.el8.noarch.rpm && echo "paquete de zabbix descargado" || echo "Hubo errores descargando el paquete de zabbix."; exit
+#dnf clean all
+#dnf install zabbix-server-mysql zabbix-web-mysql zabbix-apache-conf zabbix-agent && echo "Instalado con exito, puede proceder a configurarlo." || echo "Hubo errores instalando los paquetes"; exit
+
+sudo firewall-cmd --add-port=161/tcp --permanent
+sudo firewall-cmd --add-port=162/tcp --permanent
+firewall-cmd --reload
 
 firewalld_status=$(systemctl show -p ActiveState firewalld | cut -d "=" -f2)
 
