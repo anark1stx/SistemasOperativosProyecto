@@ -1,4 +1,5 @@
 #!/bin/bash 
+cp -R /Mantenimiento/Automatizacion/scripts_cron /var/
 
 opciont="99"
 clear
@@ -17,18 +18,18 @@ do
 	case "$opciont" in 
 		"1")
 			clear
-			./Mantenimiento/Automatizacion/scripts_cron/backup_sibim.sh
-			./Mantenimiento/Automatizacion/scripts_cron/backup_mysql.sh
+			./var/scripts_cron/backup_sibim.sh "MANUAL"
+			./var/scripts_cron/backup_mysql.sh "MANUAL"
 			;;
 
 		"2")
 			clear
-			./Mantenimiento/Automatizacion/scripts_cron/backup_sibim.sh
+			./var/scripts_cron/backup_sibim.sh "MANUAL"
 			;;
 
 		"3")
 			clear
-			./Mantenimiento/Automatizacion/scripts_cron/backup_mysql.sh
+			./var/scripts_cron/backup_mysql.sh "MANUAL"
 			;;
 		"0")
 			clear
