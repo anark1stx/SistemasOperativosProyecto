@@ -1620,7 +1620,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaUsuarioMYSQL`(
 BEGIN
 SET @dropexists = concat('DROP USER IF EXISTS ', USUARIO, '@', 'localhost',';');
     PREPARE dropUser FROM @dropexists;
-    EXECUTE dropUser;SET @alta = concat('CREATE USER ', USUARIO, '@', 'localhost', ' IDENTIFIED BY ''', CONTRASENA, ''' DEFAULT ROLE ',ROL,';');
+    EXECUTE dropUser;SET @alta = concat('CREATE USER ', USUARIO, '@', 'localhost', ' IDENTIFIED BY ''', CONTRASENA, ''',';');
     PREPARE createUser FROM @alta;
     EXECUTE createUser;
 SET @grant_rol = concat('GRANT ' , ROL, ' TO ', USUARIO,'@', 'localhost', ';');
