@@ -2,7 +2,7 @@
 0 0 1 * * /var/scripts_cron/backup_home.sh TOTAL
 
 #backup_home.sh incremental
-0 0 * * 1 /var/scripts_cron/backup_home.sh INCREMENTAKL
+0 0 * * 1 /var/scripts_cron/backup_home.sh INCREMENTAL
 
 #backup_etc.sh total
 0 0 1 * * /var/scripts_cron/backup_etc.sh TOTAL
