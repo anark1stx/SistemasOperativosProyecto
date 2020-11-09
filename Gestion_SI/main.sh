@@ -41,7 +41,7 @@ do
 			clear
 			./Mantenimiento/Automatizacion/UsuariosYGrupos/main.sh
 			;;
-		"4")
+		"5")
 			clear
 			mysql_instalado=$(yum list installed | grep mysql)
 			if  [ -n "$mysql_instalado" ] ; then
