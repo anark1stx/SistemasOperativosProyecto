@@ -6,7 +6,7 @@ if [[ ${EUID:-$(id -u)} -ne 0 ]]; then
 fi
 
 mkdir -p /logs
-
+chmod -R u+x . 
 opcion0="99"
 clear
 while [ "$opcion0" != "0"  ] 
