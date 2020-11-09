@@ -1784,12 +1784,12 @@ SET @dropexists = concat('DROP USER IF EXISTS ', USUARIO, '@', 'localhost',';');
     EXECUTE dropUser;SET @alta = concat('CREATE USER ', USUARIO, '@', 'localhost', ' IDENTIFIED BY ''', CONTRASENA, '''',';');
     PREPARE createUser FROM @alta;
     EXECUTE createUser;
-SET @set_rol = concat('SET DEFAULT ROLE ' , ROL, ' FOR ', USUARIO,'@', '%', ';');
-    PREPARE setRole FROM @set_rol;
-    EXECUTE setRole;
 SET @grant_rol = concat('GRANT ' , ROL, ' TO ', USUARIO,'@', '%', ';');
     PREPARE grantRole FROM @grant_rol;
     EXECUTE grantRole;
+SET @set_rol = concat('SET DEFAULT ROLE ' , ROL, ' FOR ', USUARIO,'@', '%', ';');
+    PREPARE setRole FROM @set_rol;
+    EXECUTE setRole;
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2302,8 +2302,8 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarRolUsuarioMYSQL`(IN USUARIO VARCHAR(50))
 BEGIN
-    SELECT DEFAULT_ROLE_USER AS 'ROL' 
-    FROM mysql.default_roles WHERE default_roles.USER = USUARIO;
+    SELECT Role AS 'ROL' 
+    FROM mysql.roles_mapping WHERE roles_mapping.USER = USUARIO;
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
