@@ -79,7 +79,7 @@ else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando mysql." >> /logs/resultados_scripts.log ; exit
 fi
 
-#echo "Iniciando configuracion automatica de mysql" ; ./mysql.exp && "Con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo un error configurando mysql de manera automatica, el script seguira corriendo pero debera configurarlo manualmente luego." > /logs/resultados_scripts.log ; exit)
+echo "Iniciando configuracion automatica de mysql" ; ./mysql.exp && "Con exito" || echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo un error configurando mysql de manera automatica, el script seguira corriendo pero debera configurarlo manualmente luego." > /logs/resultados_scripts.log
 #la instalacion de mysql fue automatizada con autoexpect, posteriormente si el administrador quisiera hacerla lo puede hacer desde el menu principal, pero a mi me pidieron automatizar asi que automatizamos.
 
 service sshd start
