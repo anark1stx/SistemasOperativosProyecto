@@ -16,6 +16,7 @@ do
 	case "$opciont" in 
 		"1")
 			clear
+			cd /
 			./var/scripts_cron/backup_mysql.sh "MANUAL"
 			;;
 		"0")
