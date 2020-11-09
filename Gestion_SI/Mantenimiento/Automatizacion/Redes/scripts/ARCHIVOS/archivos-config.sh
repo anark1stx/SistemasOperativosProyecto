@@ -57,7 +57,6 @@ service mysql stop &>/dev/null
 killall -9 mysqld &>/dev/null
 rm -rf /etc/mysql &>/dev/null
 rm -rf /var/lib/mysql &>/dev/null
-cat $mi_mysql > /etc/my.cnf
 #mysql 8 solo funciona sobre arquitectura de 32 bits por lo que tengo que recurrir a mariadb.
 #no existen paquetes para CentOS 7 de 32 bits pero si para centos 6.
 
@@ -72,6 +71,7 @@ echo 'gpgcheck=1'
 } > /etc/yum.repos.d/mariadb.org.repo
 
 yum install -y MariaDB-server && echo "Mysql instalado con exito" ; service mysql start
+cat $mi_mysql > /etc/my.cnf
 
 mysql_status=$(service mysql status | grep "ERROR")
 
