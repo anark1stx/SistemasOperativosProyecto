@@ -147,6 +147,7 @@ chmod 600 /home/admin/.my.cnf
 
 #copio todos los scripts al directorio acordado
 cp -R Mantenimiento/Automatizacion/scripts_cron /var/
+chmod -R +x /var/scripts_cron 
 cp mis_rutinas /var/mis_rutinas
 #asigno el archivo
 crontab -u root /var/mis_rutinas
