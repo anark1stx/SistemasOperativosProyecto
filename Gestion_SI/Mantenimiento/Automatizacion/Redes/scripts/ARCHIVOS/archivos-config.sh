@@ -48,7 +48,7 @@ iptables -P FORWARD ACCEPT
 iptables -F
 
 yum clean all
-echo "Instalando git, wget ssh, rsync, expect, crontab."; yum install -q -y epel-release expect git openssh-server openssh-clients sshpass rsync crontab httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
+echo "Instalando git, wget ssh, rsync, expect, crontab, rsyslog."; yum install -q -y epel-release rsyslog expect git openssh-server openssh-clients sshpass rsync crontab httpd &>/dev/null && echo "paquetes instalados con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores instalando los paquetes" >> /logs/resultados_scripts.log ; exit)
 
 echo "Instalando MySQL"
 rm -Rf /var/lib/mysql &>/dev/null #en caso de que ya haya una instalacion borro los datos y desinstalo
@@ -86,6 +86,7 @@ echo "Iniciando configuracion automatica de mysql" ; ./mysql.exp && echo "Con ex
 
 service sshd start
 service httpd start
+service rsyslog start
 
 sshd_status=$(service sshd status | grep "ERROR")
 
@@ -103,10 +104,12 @@ else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Apache." >> /logs/resultados_scripts.log ; exit
 fi
 
+chkconfig --add rsyslog
 chkconfig --add sshd
 chkconfig --add httpd
 chkconfig --add mysql
 
+chkconfig rsyslog on
 chkconfig sshd on
 chkconfig httpd on
 chkconfig mysql on
