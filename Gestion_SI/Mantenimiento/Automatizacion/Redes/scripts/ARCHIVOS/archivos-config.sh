@@ -70,7 +70,16 @@ echo 'gpgcheck=1'
 } > /etc/yum.repos.d/mariadb.org.repo
 
 yum install -y MariaDB-server && echo "Mysql instalado con exito"
-service mysql start && echo "Iniciando configuracion automatica de mysql" ; ./mysql.exp && "Con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo un error configurando mysql de manera automatica, el script seguira corriendo pero debera configurarlo manualmente luego." > /logs/resultados_scripts.log ; exit)
+
+mysql_status=$(service mysql status | grep "ERROR")
+
+if [[ -z "$mysql_status" ]]; then
+	echo "MySQL instalado correctamente"
+else
+	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando mysql." >> /logs/resultados_scripts.log ; exit
+fi
+
+#echo "Iniciando configuracion automatica de mysql" ; ./mysql.exp && "Con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo un error configurando mysql de manera automatica, el script seguira corriendo pero debera configurarlo manualmente luego." > /logs/resultados_scripts.log ; exit)
 #la instalacion de mysql fue automatizada con autoexpect, posteriormente si el administrador quisiera hacerla lo puede hacer desde el menu principal, pero a mi me pidieron automatizar asi que automatizamos.
 
 service sshd start
@@ -90,14 +99,6 @@ if [[ -z "$apache_status" ]]; then
 	echo "Apache instalado correctamente"
 else
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando Apache." >> /logs/resultados_scripts.log ; exit
-fi
-
-mysql_status=$(service mysql status | grep "ERROR")
-
-if [[ -z "$mysql_status" ]]; then
-	echo "MySQL instalado correctamente"
-else
-	echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubieron errores instalando mysql." >> /logs/resultados_scripts.log ; exit
 fi
 
 chkconfig --add sshd
