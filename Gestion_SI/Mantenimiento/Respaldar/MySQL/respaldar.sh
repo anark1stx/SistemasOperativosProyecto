@@ -1,5 +1,5 @@
 #!/bin/bash 
-cp -R /Mantenimiento/Automatizacion/scripts_cron /var/
+cp -R Mantenimiento/Automatizacion/scripts_cron /var/
 
 opciont="99"
 clear
