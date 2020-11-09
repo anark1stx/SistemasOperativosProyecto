@@ -1784,10 +1784,10 @@ SET @dropexists = concat('DROP USER IF EXISTS ', USUARIO, '@', 'localhost',';');
     EXECUTE dropUser;SET @alta = concat('CREATE USER ', USUARIO, '@', 'localhost', ' IDENTIFIED BY ''', CONTRASENA, '''',';');
     PREPARE createUser FROM @alta;
     EXECUTE createUser;
-SET @grant_rol = concat('GRANT ' , ROL, ' TO ', USUARIO,'@','192.168.%.%',';');
+SET @grant_rol = concat('GRANT ' , ROL, ' TO ', USUARIO,'@\'192.168.%.%\'',';');
     PREPARE grantRole FROM @grant_rol;
     EXECUTE grantRole;
-SET @set_rol = concat('SET DEFAULT ROLE ' , ROL, ' FOR ', USUARIO,'@','192.168.%.%',';');
+SET @set_rol = concat('SET DEFAULT ROLE ' , ROL, ' FOR ', USUARIO,'@\'192.168.%.%\'',';');
     PREPARE setRole FROM @set_rol;
     EXECUTE setRole;
 END; //
