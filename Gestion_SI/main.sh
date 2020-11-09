@@ -43,7 +43,7 @@ do
 			;;
 		"5")
 			clear
-			mysql_instalado=$(yum list installed | grep mysql)
+			mysql_instalado=$(yum list installed | grep mariadb)
 			if  [ -n "$mysql_instalado" ] ; then
 				echo "Si ejecuto el script de automatizacion del servidor, la contrasena del usuario root es la misma que la del usuario admin."
 				mysql_secure_installation
