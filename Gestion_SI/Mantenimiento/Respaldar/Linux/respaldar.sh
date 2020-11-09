@@ -1,5 +1,5 @@
 #!/bin/bash 
-
+cp -R Mantenimiento/Automatizacion/scripts_cron /var/
 opciony="99"
 clear
 while [ "$opciony" != "0"  ] 
@@ -17,7 +17,6 @@ do
 	case "$opciony" in 
 		"1")
 			clear
-			cp -R /Mantenimiento/Automatizacion/scripts_cron /var/
 			cd /
 			./var/scripts_cron/backup_home.sh "MANUAL"
 			./var/scripts_cron/backup_etc.sh "MANUAL"
@@ -25,14 +24,12 @@ do
 
 		"2")
 			clear
-			cp -R /Mantenimiento/Automatizacion/scripts_cron /var/
 			cd /
 			./var/scripts_cron/backup_home.sh "MANUAL"
 			;;
 
 		"3")
 			clear
-			cp -R /Mantenimiento/Automatizacion/scripts_cron /var/
 			cd /
 			./var/scripts_cron/backup_etc.sh "MANUAL"
 			;;
