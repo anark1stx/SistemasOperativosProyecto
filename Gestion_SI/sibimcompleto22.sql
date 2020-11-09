@@ -20,7 +20,7 @@
 CREATE ROLE IF NOT EXISTS 'administrador';
 GRANT ALL PRIVILEGES ON *.* TO 'administrador';
 GRANT EXECUTE ON *.* TO 'administrador';
-CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY 'overcl0de-4DM'
+CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY 'overcl0de-4DM';
 GRANT 'administrador' TO 'admin'@'localhost';
 CREATE ROLE IF NOT EXISTS 'medico';
 GRANT EXECUTE ON `sibim`.* TO 'medico'@`%`;
