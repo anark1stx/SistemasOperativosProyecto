@@ -8,6 +8,7 @@
 mi_interfaz="Mantenimiento/Automatizacion/Redes/configs/RESPALDOS/interface" #archivo preconfigurado de la interfaz
 FOUND=$(cat /proc/net/dev | grep -v "lo" | grep ":") #verificar que haya conectado algun adaptador de red
 mi_ssh="Mantenimiento/Automatizacion/Redes/configs/RESPALDOS/ssh"
+mi_sudoers="Mantenimiento/Automatizacion/Redes/configs/RESPALDOS/sudoers"
 if  [ -n "$FOUND" ] ; then
 	echo "Adaptador(es) de red detectados: "
         echo $FOUND
@@ -77,3 +78,5 @@ cd /backup/Linux && git init #repositorio con archivos del sistema, /etc, /home
 cd /backup/SIBIM-BDS && git init #repositorio para sibim y mysql
 chown -R admin /backup
 chmod 755 /backup
+
+cat $mi_sudoers > /etc/sudoers
