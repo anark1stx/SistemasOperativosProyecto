@@ -19,6 +19,7 @@ do
 	echo "|3- Configurar servidor(es)			|"
 	echo "|4- Agregar y configurar usuarios de proyecto	|"
 	echo "|5- Configurar mysql manualmente			|"
+	echo "|6- Ver logs					|"
 	echo "|0- Salir						|"
 	echo "---------------------------------------------------------"
 	read -p "> " opcion0
@@ -50,6 +51,10 @@ do
 			else
 				echo "mysql no esta instalado, instalelo primero"
 			fi
+			;;
+		"6")
+			clear
+			./menu_logs.sh
 			;;
 		"0")
 			clear
