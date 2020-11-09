@@ -7,5 +7,5 @@ echo "Copiando el repositorio." ; rsync -e "ssh -i /home/admin/.ssh/id_rsa -p 49
 echo "SHA seleccionado fue: $sha, restaurandolo." ; cd /var/Linux && git reset --hard $sha && echo "Repositorio restaurado a la version indicada" || (echo "Hubo errores restaurando el repositorio" >> /logs/restauraciones.log ; exit)
 cd /var #me muevo a var para no tener problemas al sobreescribir home
 cp -R /var/Linux/home /home && echo "Directorio home respaldado con exito" || echo "Hubo errores al sobreescribir el directorio home"
-cp -R etc /var/Linux/etc && echo "Directorio etc respaldado con exito" || echo "Hubo errores al sobreescribir el directorio etc"
+cp -R /var/Linux/etc /etc && echo "Directorio etc respaldado con exito" || echo "Hubo errores al sobreescribir el directorio etc"
 rm -rf /var/Linux
