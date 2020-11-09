@@ -34,7 +34,7 @@ CREATE TABLE `analisis` (
   `ID` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `atiende` (
   KEY `CI_medico` (`CI_medico`),
   CONSTRAINT `atiende_ibfk_1` FOREIGN KEY (`CI_paciente`) REFERENCES `paciente` (`CI`) ON DELETE CASCADE,
   CONSTRAINT `atiende_ibfk_2` FOREIGN KEY (`CI_medico`) REFERENCES `medico` (`CI`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +91,7 @@ CREATE TABLE `auxiliar` (
   `CI` int NOT NULL,
   PRIMARY KEY (`CI`),
   CONSTRAINT `auxiliar_ibfk_1` FOREIGN KEY (`CI`) REFERENCES `usuario` (`CI`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -119,7 +119,7 @@ CREATE TABLE `corresponde` (
   KEY `CI_auxiliar` (`CI_auxiliar`),
   CONSTRAINT `corresponde_ibfk_1` FOREIGN KEY (`CI_medico`) REFERENCES `medico` (`CI`) ON DELETE CASCADE,
   CONSTRAINT `corresponde_ibfk_2` FOREIGN KEY (`CI_auxiliar`) REFERENCES `auxiliar` (`CI`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,7 +148,7 @@ CREATE TABLE `de` (
   KEY `ID_pregunta` (`ID_pregunta`),
   CONSTRAINT `de_ibfk_1` FOREIGN KEY (`ID_formulario`) REFERENCES `formulario` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `de_ibfk_2` FOREIGN KEY (`ID_pregunta`) REFERENCES `pregunta` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +180,7 @@ CREATE TABLE `determina` (
   KEY `nombre_enfermedad` (`nombre_enfermedad`),
   CONSTRAINT `determina_ibfk_1` FOREIGN KEY (`ID_consulta`, `fecha`, `CI_paciente`, `CI_medico`, `ID_formulario`, `ID_pregunta`) REFERENCES `responde` (`ID_consulta`, `fecha`, `CI_paciente`, `CI_medico`, `ID_formulario`, `ID_pregunta`) ON DELETE CASCADE,
   CONSTRAINT `determina_ibfk_2` FOREIGN KEY (`nombre_enfermedad`) REFERENCES `enfermedad` (`nombre`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -207,7 +207,7 @@ CREATE TABLE `dia_semana` (
   `dia` tinyint NOT NULL,
   PRIMARY KEY (`CI_paciente`,`ID_tratamiento`,`fecha_inicio`,`dia`),
   CONSTRAINT `dia_semana_ibfk_1` FOREIGN KEY (`CI_paciente`, `ID_tratamiento`, `fecha_inicio`) REFERENCES `sigue` (`CI_paciente`, `ID_tratamiento`, `fecha_inicio`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -231,7 +231,7 @@ CREATE TABLE `enfermedad` (
   `nombre` varchar(160) NOT NULL,
   `tipo` varchar(90) DEFAULT NULL,
   PRIMARY KEY (`nombre`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -259,7 +259,7 @@ CREATE TABLE `especificacion` (
   KEY `nombre_indicacion` (`nombre_indicacion`),
   CONSTRAINT `especificacion_ibfk_1` FOREIGN KEY (`ID_analisis`) REFERENCES `analisis` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `especificacion_ibfk_2` FOREIGN KEY (`nombre_indicacion`) REFERENCES `indicacion` (`nombre`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -282,7 +282,7 @@ DROP TABLE IF EXISTS `estado`;
 CREATE TABLE `estado` (
   `nombre` varchar(90) NOT NULL,
   PRIMARY KEY (`nombre`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -312,7 +312,7 @@ CREATE TABLE `examenfisico` (
   KEY `ID_signo` (`ID_signo`),
   CONSTRAINT `examenfisico_ibfk_1` FOREIGN KEY (`ID_consulta`, `fecha_c`, `CI_paciente`, `CI_medico`) REFERENCES `atiende` (`ID_consulta`, `fecha`, `CI_paciente`, `CI_medico`) ON DELETE CASCADE,
   CONSTRAINT `examenfisico_ibfk_2` FOREIGN KEY (`ID_signo`) REFERENCES `signo_clinico` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -338,7 +338,7 @@ CREATE TABLE `formulario` (
   `xml` mediumtext NOT NULL,
   `v_previa` mediumblob NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -361,7 +361,7 @@ DROP TABLE IF EXISTS `indicacion`;
 CREATE TABLE `indicacion` (
   `nombre` varchar(90) NOT NULL,
   PRIMARY KEY (`nombre`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -385,7 +385,7 @@ CREATE TABLE `medico` (
   `CI` int NOT NULL,
   PRIMARY KEY (`CI`),
   CONSTRAINT `medico_ibfk_1` FOREIGN KEY (`CI`) REFERENCES `usuario` (`CI`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -410,7 +410,7 @@ CREATE TABLE `medico_especialidad` (
   `especialidad` varchar(50) NOT NULL,
   PRIMARY KEY (`CI`,`especialidad`),
   CONSTRAINT `medico_especialidad_ibfk_1` FOREIGN KEY (`CI`) REFERENCES `medico` (`CI`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -438,7 +438,7 @@ CREATE TABLE `paciente` (
   `sexo` char(1) NOT NULL,
   PRIMARY KEY (`CI`),
   CONSTRAINT `paciente_ibfk_1` FOREIGN KEY (`CI`) REFERENCES `usuario` (`CI`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,7 +466,7 @@ CREATE TABLE `parametro` (
   `referencia_max` decimal(8,2) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -491,7 +491,7 @@ CREATE TABLE `pregunta` (
   `pregunta` varchar(300) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `pregunta` (`pregunta`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -518,7 +518,7 @@ CREATE TABLE `ref_c_previa` (
   KEY `ID_cRef` (`ID_cRef`),
   CONSTRAINT `ref_c_previa_ibfk_1` FOREIGN KEY (`ID_cActual`) REFERENCES `atiende` (`ID_consulta`) ON DELETE CASCADE,
   CONSTRAINT `ref_c_previa_ibfk_2` FOREIGN KEY (`ID_cRef`) REFERENCES `atiende` (`ID_consulta`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -547,7 +547,7 @@ CREATE TABLE `registra` (
   KEY `ID_sintoma` (`ID_sintoma`),
   CONSTRAINT `registra_ibfk_1` FOREIGN KEY (`ID_consulta`, `fecha_c`, `CI_paciente`, `CI_medico`) REFERENCES `atiende` (`ID_consulta`, `fecha`, `CI_paciente`, `CI_medico`) ON DELETE CASCADE,
   CONSTRAINT `registra_ibfk_2` FOREIGN KEY (`ID_sintoma`) REFERENCES `sintoma` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -575,7 +575,7 @@ CREATE TABLE `registro_es` (
   KEY `nombre_e` (`nombre_e`),
   CONSTRAINT `registro_es_ibfk_1` FOREIGN KEY (`CI_paciente`) REFERENCES `paciente` (`CI`) ON DELETE CASCADE,
   CONSTRAINT `registro_es_ibfk_2` FOREIGN KEY (`nombre_e`) REFERENCES `estado` (`nombre`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -607,7 +607,7 @@ CREATE TABLE `requiere` (
   KEY `ID_analisis` (`ID_analisis`),
   CONSTRAINT `requiere_ibfk_1` FOREIGN KEY (`ID_consulta`, `fecha_c`, `CI_paciente`, `CI_medico`, `ID_formulario`, `ID_pregunta`) REFERENCES `responde` (`ID_consulta`, `fecha`, `CI_paciente`, `CI_medico`, `ID_formulario`, `ID_pregunta`) ON DELETE CASCADE,
   CONSTRAINT `requiere_ibfk_2` FOREIGN KEY (`ID_analisis`) REFERENCES `analisis` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -639,7 +639,7 @@ CREATE TABLE `responde` (
   KEY `ID_formulario` (`ID_formulario`,`ID_pregunta`),
   CONSTRAINT `responde_ibfk_1` FOREIGN KEY (`ID_consulta`, `fecha`, `CI_paciente`, `CI_medico`) REFERENCES `atiende` (`ID_consulta`, `fecha`, `CI_paciente`, `CI_medico`) ON DELETE CASCADE,
   CONSTRAINT `responde_ibfk_2` FOREIGN KEY (`ID_formulario`, `ID_pregunta`) REFERENCES `de` (`ID_formulario`, `ID_pregunta`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -672,7 +672,7 @@ CREATE TABLE `resultado` (
   KEY `ID_analisis` (`ID_analisis`,`ID_parametro`),
   CONSTRAINT `resultado_ibfk_1` FOREIGN KEY (`ID_consulta`, `fecha_c`, `CI_paciente`, `CI_medico`) REFERENCES `atiende` (`ID_consulta`, `fecha`, `CI_paciente`, `CI_medico`) ON DELETE CASCADE,
   CONSTRAINT `resultado_ibfk_2` FOREIGN KEY (`ID_analisis`, `ID_parametro`) REFERENCES `tiene` (`ID_analisis`, `ID_parametro`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -702,7 +702,7 @@ CREATE TABLE `s_diario` (
   KEY `CI_paciente` (`CI_paciente`,`ID_tratamiento`,`fecha_inicio`),
   CONSTRAINT `s_diario_ibfk_1` FOREIGN KEY (`ID_seg`) REFERENCES `seguimiento` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `s_diario_ibfk_2` FOREIGN KEY (`CI_paciente`, `ID_tratamiento`, `fecha_inicio`) REFERENCES `sigue` (`CI_paciente`, `ID_tratamiento`, `fecha_inicio`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -726,7 +726,7 @@ CREATE TABLE `seguimiento` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(3600) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -751,7 +751,7 @@ CREATE TABLE `signo_clinico` (
   `nombre` varchar(160) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -781,7 +781,7 @@ CREATE TABLE `sigue` (
   KEY `ID_tratamiento` (`ID_tratamiento`),
   CONSTRAINT `sigue_ibfk_1` FOREIGN KEY (`ID_tratamiento`) REFERENCES `tratamiento` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `sigue_ibfk_2` FOREIGN KEY (`CI_paciente`) REFERENCES `paciente` (`CI`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -806,7 +806,7 @@ CREATE TABLE `sintoma` (
   `nombre` varchar(160) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -838,7 +838,7 @@ CREATE TABLE `sugiere` (
   KEY `ID_tratamiento` (`ID_tratamiento`),
   CONSTRAINT `sugiere_ibfk_1` FOREIGN KEY (`ID_consulta`, `fecha_c`, `CI_paciente`, `CI_medico`, `ID_formulario`, `ID_pregunta`) REFERENCES `responde` (`ID_consulta`, `fecha`, `CI_paciente`, `CI_medico`, `ID_formulario`, `ID_pregunta`) ON DELETE CASCADE,
   CONSTRAINT `sugiere_ibfk_2` FOREIGN KEY (`ID_tratamiento`) REFERENCES `tratamiento` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -865,7 +865,7 @@ CREATE TABLE `tiene` (
   KEY `ID_parametro` (`ID_parametro`),
   CONSTRAINT `tiene_ibfk_1` FOREIGN KEY (`ID_analisis`) REFERENCES `analisis` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `tiene_ibfk_2` FOREIGN KEY (`ID_parametro`) REFERENCES `parametro` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -890,7 +890,7 @@ CREATE TABLE `tratamiento` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(16000) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -922,7 +922,7 @@ CREATE TABLE `usuario` (
   `correo` varchar(50) DEFAULT '@',
   `foto` mediumblob,
   PRIMARY KEY (`CI`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -947,7 +947,7 @@ CREATE TABLE `usuario_tel` (
   `telefono` varchar(9) NOT NULL,
   PRIMARY KEY (`CI`,`telefono`),
   CONSTRAINT `usuario_tel_ibfk_1` FOREIGN KEY (`CI`) REFERENCES `usuario` (`CI`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
