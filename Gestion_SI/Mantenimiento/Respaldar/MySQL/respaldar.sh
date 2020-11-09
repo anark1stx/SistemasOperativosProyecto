@@ -10,7 +10,7 @@ do
 	echo "|								|"
 	echo "|1- Respaldar todas las bases de datos			|"
 	echo "|2- Respaldar base de datos SIBIM				|"
-	echo "|3- Respaldar base de datos MySQL					|"
+	echo "|3- Respaldar base de datos MySQL				|"
 	echo "|0- Salir							|"
 	echo "----------------------------------------------------------------"
 	read -p "> " opciont
