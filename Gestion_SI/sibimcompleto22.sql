@@ -972,12 +972,12 @@ UNLOCK TABLES;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAnalisis`(IN NOM VARCHAR(90), OUT ID_AN INT)
 BEGIN
     INSERT INTO analisis (nombre) VALUES (NOM);
     SET ID_AN = LAST_INSERT_ID();
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -992,11 +992,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAnalisisIndicacion`(IN NOM VARCHAR(90))
 BEGIN
     INSERT INTO indicacion(nombre) SELECT NOM WHERE NOT EXISTS(SELECT nombre FROM indicacion WHERE nombre=NOM) LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1011,13 +1011,13 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAnalisisParametro`(IN NOM VARCHAR(90), IN UNI VARCHAR(20),IN REF_MIN DECIMAL(8,2), IN REF_MAX DECIMAL(8,2), OUT ID_P INT)
 BEGIN
     INSERT INTO parametro (nombre,unidad,referencia_min,referencia_max) 
 VALUES(NOM,UNI,REF_MIN,REF_MAX);
     SET ID_P = LAST_INSERT_ID();
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1032,11 +1032,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAnalisisRequerido`(IN ID_C INT,FEC_C DATETIME, IN CI_P INT, IN CI_M INT, ID_F INT, ID_P INT, IN ID_AN INT)
 BEGIN
 INSERT INTO requiere(ID_consulta,fecha_c,CI_paciente,CI_medico,ID_formulario,ID_pregunta,ID_analisis) VALUES (ID_C,FEC_C,CI_P,CI_M,ID_F,ID_P,ID_AN);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1051,11 +1051,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAnalisisResultados`(IN ID_C INT, IN FEC_C DATETIME,IN CI_P INT,IN CI_M INT,IN ID_AN INT, IN ID_P INT, IN VAL DECIMAL(8,2), IN FEC_R DATE)
 BEGIN
 INSERT INTO resultado(ID_consulta,fecha_c,CI_paciente,CI_medico,ID_analisis,ID_parametro,valor,fecha) VALUES (ID_C,FEC_C,CI_P,CI_M,ID_AN,ID_P,VAL,FEC_R);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1070,11 +1070,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAnalisisTieneParametro`(IN ID_AN INT,IN ID_P INT)
 BEGIN
     INSERT INTO tiene(ID_analisis,ID_parametro)  VALUES(ID_AN,ID_P);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1089,12 +1089,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAtiende`(IN FEC_C DATETIME,IN CI_P INT, IN CI_M INT,IN NOM_CONSULTA VARCHAR(120), IN MOT VARCHAR(400), OUT ID_C INT)
 BEGIN
 INSERT INTO atiende(fecha,CI_paciente,CI_medico,motivo,nombre_ref,activo) VALUES (FEC_C,CI_P,CI_M,MOT,NOM_CONSULTA, 1);
 SET ID_C = LAST_INSERT_ID();
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1109,11 +1109,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAuxiliar`(IN cedula INT)
 BEGIN
 INSERT INTO auxiliar (CI) SELECT cedula WHERE NOT EXISTS(SELECT 1 FROM auxiliar WHERE CI = cedula);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1128,11 +1128,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAux_c_med`(IN CI_M INT, IN CI_A INT, IN FEC DATETIME)
 BEGIN
 INSERT INTO corresponde(CI_medico,CI_auxiliar,fecha) SELECT CI_M,CI_A,FEC WHERE NOT EXISTS(SELECT 1 FROM corresponde WHERE CI_medico = CI_M AND CI_auxiliar=CI_A AND fecha = FEC);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1147,11 +1147,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaDeterminaEnfermedad`(IN ID_C INT, FEC DATETIME, CI_P INT, CI_M INT, IN ID_F INT, ID_P INT, IN NOM_E VARCHAR (160))
 BEGIN
 INSERT INTO determina(ID_consulta,fecha,CI_paciente,CI_medico,ID_formulario,ID_pregunta,nombre_enfermedad) VALUES (ID_C,FEC,CI_P,CI_M,ID_F,ID_P,NOM_E);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1166,11 +1166,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaDiaSemana`(IN CI_P INT,IN ID_T INT,IN FEC_INI DATE, IN D TINYINT)
 BEGIN
 INSERT INTO dia_semana(CI_paciente,ID_tratamiento,fecha_inicio,dia) VALUES (CI_P,ID_T,FEC_INI,D);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1185,11 +1185,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaEnfermedad`(IN NOM VARCHAR (160))
 BEGIN
 INSERT INTO enfermedad(nombre) SELECT NOM WHERE NOT EXISTS(SELECT 1 FROM ENFERMEDAD WHERE NOMBRE = NOM) LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1204,12 +1204,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaEspecificacion`(IN ID_AN INT,IN NOM_I VARCHAR(90), IN DESCR VARCHAR(500))
 BEGIN
     INSERT INTO especificacion(ID_analisis,nombre_indicacion,descripcion) 
     VALUES(ID_AN,NOM_I,DESCR);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1224,11 +1224,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaEstado`(IN NOM VARCHAR(90))
 BEGIN
     INSERT INTO estado(nombre) SELECT NOM WHERE NOT EXISTS(SELECT 1 FROM estado WHERE nombre=NOM) LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1243,11 +1243,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaExamenFisico`(IN ID_C INT, IN FEC_C DATETIME, IN CI_P INT, IN CI_M INT, IN ID_SC INT)
 BEGIN
 INSERT INTO examenfisico(ID_consulta,fecha_c,CI_paciente,CI_medico,ID_signo) VALUES (ID_C,FEC_C,CI_P,CI_M,ID_SC);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1262,12 +1262,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaFormulario`(IN NOMBRE VARCHAR(90), IN XML MEDIUMTEXT, IN V_PREVIA MEDIUMBLOB, OUT ID_F INT)
 BEGIN
 INSERT INTO formulario(nombre,xml,v_previa) VALUES (NOMBRE,XML,V_PREVIA);
 SET ID_F = LAST_INSERT_ID();
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1282,11 +1282,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaMedico`(IN cedula INT)
 BEGIN
 INSERT INTO medico (CI) SELECT cedula WHERE NOT EXISTS(SELECT 1 FROM medico WHERE CI = cedula);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1301,11 +1301,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaMedicoEspecialidad`(IN cedula INT, IN ESPECIALIDAD VARCHAR(50))
 BEGIN
 INSERT INTO medico_especialidad (CI,especialidad) VALUES (cedula,ESPECIALIDAD);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1320,11 +1320,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaPaciente`(IN cedula INT,IN OCUP varchar(50),IN E_C varchar(7), IN F_NAC DATE,IN S CHAR(1))
 BEGIN
 INSERT INTO PACIENTE (CI,ocupacion,e_civil,fecha_nac,sexo) VALUES (cedula,OCUP,E_C,F_NAC,S) ON DUPLICATE KEY UPDATE ocupacion = OCUP, e_civil = E_C, fecha_nac = F_NAC, sexo = S;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1339,13 +1339,13 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaPacienteSeguimientoDiario`(IN ID_T INT, IN CI_P INT, IN FEC_INI DATE,IN FEC_SEG DATE, IN DESCR VARCHAR(600))
 BEGIN
 INSERT INTO seguimiento(descripcion) VALUES (DESCR);
 SET @ID_S = LAST_INSERT_ID();
 INSERT INTO s_diario(ID_seg,fecha,ID_tratamiento,CI_paciente,fecha_inicio) VALUES (@ID_S,FEC_SEG,ID_T,CI_P,FEC_INI);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1360,11 +1360,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaPacienteSigueTratamiento`(IN ID_T INT, IN CI_P INT, IN F_INI DATE, IN F_FIN DATE)
 BEGIN
 INSERT INTO sigue(ID_tratamiento,CI_paciente,fecha_inicio,fecha_fin,resultado) VALUES (ID_T,CI_P, F_INI,F_FIN,'');
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1379,12 +1379,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaPregunta`(IN PREG VARCHAR(300), OUT ID_P INT)
 BEGIN
     INSERT INTO pregunta(pregunta) SELECT PREG WHERE NOT EXISTS(SELECT 1 from pregunta where pregunta=PREG) LIMIT 1;
     SET ID_P = (SELECT ID FROM pregunta where pregunta=PREG);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1399,11 +1399,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaPreguntaDeFormulario`(IN ID_P INT, IN ID_F INT, IN NOM_CONTROL_P VARCHAR(40), NOM_CONTROL_R VARCHAR(40))
 BEGIN
 INSERT INTO de(ID_formulario,ID_pregunta,nombre_control_pregunta,nombre_control_respuesta) VALUES (ID_F,ID_P,NOM_CONTROL_P,NOM_CONTROL_R);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1418,11 +1418,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaRef_c_previa`(IN IDC_ACTUAL INT, IN IDC_REF INT)
 BEGIN
 INSERT INTO ref_c_previa(ID_cActual,ID_cRef) VALUES (IDC_ACTUAL,IDC_REF);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1437,11 +1437,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaRegistraSintoma`(IN ID_C INT, IN FEC_C DATETIME,IN CI_P INT, IN CI_M INT, IN ID_S INT)
 BEGIN
 INSERT INTO registra(ID_consulta,fecha_c,CI_paciente,CI_medico,ID_sintoma) VALUES (ID_C,FEC_C,CI_P,CI_M,ID_S);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1456,11 +1456,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaRegistro_es`(IN CI_P INT, IN NOM_E VARCHAR(90))
 BEGIN
 INSERT INTO registro_es(CI_paciente,nombre_e,fecha) VALUES (CI_P,NOM_E,CAST(NOW() AS DATETIME));
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1475,11 +1475,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaResponde`(IN ID_C INT,IN FEC_C DATETIME, IN CI_P INT, IN CI_M INT, IN ID_F INT, IN ID_PREG INT, IN RESPUESTA VARCHAR(7200))
 BEGIN
 INSERT INTO responde(ID_consulta,fecha,CI_paciente,CI_medico,ID_formulario,ID_pregunta,respuesta) VALUES (ID_C,FEC_C,CI_P,CI_M,ID_F,ID_PREG,RESPUESTA);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1494,12 +1494,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaResultadoTratamiento`(IN ID_T INT, IN F_INI DATE, IN CI_P INT, IN RES VARCHAR(90))
 BEGIN
 UPDATE sigue SET resultado = RES
 WHERE sigue.ID_tratamiento = ID_T AND sigue.CI_paciente = CI_P AND sigue.fecha_inicio = F_INI;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1514,12 +1514,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaSignoClinico`(IN NOM VARCHAR (160), OUT ID_SC INT)
 BEGIN
 INSERT INTO signo_clinico(nombre) SELECT NOM WHERE NOT EXISTS(SELECT 1 FROM signo_clinico where nombre=NOM) LIMIT 1;
 SELECT ID FROM signo_clinico WHERE nombre = NOM INTO ID_SC;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1534,12 +1534,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaSintoma`(IN NOM VARCHAR (160), OUT ID_S INT)
 BEGIN
 INSERT INTO sintoma(nombre) SELECT NOM WHERE NOT EXISTS(SELECT 1 FROM sintoma where nombre=NOM) LIMIT 1;
 SELECT ID FROM sintoma WHERE nombre = NOM INTO ID_S;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1554,11 +1554,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaTratamiento`(IN NOM_T VARCHAR (160),IN DESCR VARCHAR(16000))
 BEGIN
 INSERT INTO tratamiento(nombre,descripcion) VALUES (NOM_T,DESCR);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1573,11 +1573,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaTratamientoSugerido`(IN ID_C INT,IN FEC_C DATETIME, IN CI_P INT, IN CI_M INT, IN ID_F INT, IN ID_P INT, IN ID_T INT)
 BEGIN
 INSERT INTO sugiere(ID_Consulta,fecha_c,CI_paciente,CI_medico,ID_formulario,ID_pregunta,ID_tratamiento) VALUES (ID_C,FEC_C,CI_P,CI_M,ID_F,ID_P,ID_T);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1592,11 +1592,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaUsuario`(IN cedula INT,IN NOM1 varchar(30),IN NOM2 varchar(30),IN AP1 varchar(30),IN AP2 varchar(30),IN DIR_C varchar(160), IN DIR_N INT,IN ACT BIT, IN CORR varchar(50), IN FOTO MEDIUMBLOB)
 BEGIN
 INSERT INTO Usuario (CI,nombre1,nombre2,apellido1,apellido2,direccion_calle,direccion_nroPuerta,activo,correo,foto) VALUES (cedula,NOM1,NOM2,AP1,AP2,DIR_C,DIR_N,ACT,CORR,FOTO) ON DUPLICATE KEY UPDATE nombre1 = NOM1, nombre2 = NOM2, apellido1 = AP1, apellido2 = AP2, direccion_calle = DIR_C, direccion_nroPuerta = DIR_N, activo = ACT, correo = CORR, foto = FOTO;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1611,7 +1611,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaUsuarioMYSQL`(
     IN USUARIO VARCHAR(50),
     IN CONTRASENA VARCHAR(30),
@@ -1625,7 +1625,7 @@ SET @dropexists = concat('DROP USER IF EXISTS ', USUARIO, '@', 'localhost',';');
 SET @grant_rol = concat('GRANT ' , ROL, ' TO ', USUARIO,'@', 'localhost', ';');
     PREPARE grantRole FROM @grant_rol;
     EXECUTE grantRole;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1640,11 +1640,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaUsuarioTelefono`(IN cedula INT, IN TELEFONO VARCHAR(9))
 BEGIN
     INSERT INTO usuario_tel (CI,telefono) VALUES (cedula,TELEFONO);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1659,11 +1659,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AnalisisExiste`(IN NOM VARCHAR(90),OUT EXISTE BIT)
 BEGIN
     SET EXISTE = (EXISTS(SELECT 1 FROM analisis WHERE analisis.nombre = NOM));
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1678,13 +1678,13 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `A_BLogicaUsuario`(IN cedula INT, IN CAMBIO BIT)
 BEGIN
     UPDATE Usuario SET
         activo = CAMBIO
     WHERE CI = cedula;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1699,11 +1699,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BajaCorresponde`(IN CI_M INT, IN CI_A INT, IN FEC DATETIME)
 BEGIN
 DELETE FROM CORRESPONDE WHERE CI_medico = CI_M and CI_auxiliar = CI_A and fecha = FEC;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1718,11 +1718,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BajaFormulario`(IN ID_F INT)
 BEGIN
 DELETE FROM formulario WHERE formulario.ID = ID_F;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1737,11 +1737,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BajaPreguntasDeFormulario`(IN ID_F INT)
 BEGIN
 DELETE FROM de WHERE ID_formulario = ID_F;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1756,11 +1756,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BorrarEspecialidades`(IN cedula INT)
 BEGIN
     DELETE FROM medico_especialidad WHERE medico_especialidad.CI = cedula;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1775,11 +1775,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BorrarTelefonos`(IN cedula INT)
 BEGIN
     DELETE FROM usuario_tel WHERE usuario_tel.CI = cedula;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1794,11 +1794,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarAnalisisXNombre`(IN NOM_A VARCHAR(160))
 BEGIN
     SELECT * FROM analisis WHERE nombre LIKE concat('%',NOM_A,'%') LIMIT 0,15;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1813,7 +1813,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarAUXILIARxAPELLIDO`(IN APELLIDO1 VARCHAR(30))
 BEGIN    
     SELECT usuario.CI, usuario.nombre1,usuario.nombre2,
@@ -1822,7 +1822,7 @@ BEGIN
     usuario.activo,usuario_tel.telefono
      FROM usuario,usuario_tel,auxiliar
     WHERE usuario.apellido1 LIKE concat('%',APELLIDO1,'%') AND usuario.CI = auxiliar.CI AND usuario_tel.CI = usuario.CI;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1837,7 +1837,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarAUXILIARxCI`(IN cedula INT)
 BEGIN
     SELECT usuario.CI,usuario.nombre1,usuario.nombre2,
@@ -1847,7 +1847,7 @@ BEGIN
     usuario_tel.telefono
      FROM usuario,usuario_tel,auxiliar
     WHERE usuario.CI = cedula AND auxiliar.CI = cedula AND usuario_tel.CI = cedula;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1862,12 +1862,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarConsultasPendientes`(IN CI_M INT)
 BEGIN
 SELECT * FROM atiende
 WHERE atiende.activo = 1 AND atiende.CI_medico = CI_M AND date(atiende.fecha) = CURDATE();
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1882,11 +1882,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarConsultasPrevias`(IN CI_P INT)
 BEGIN
 SELECT * FROM atiende WHERE CI_paciente = CI_P AND activo = 0;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1901,11 +1901,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarCrrAuxiliar`(IN CI_A INT)
 BEGIN
 SELECT * FROM CORRESPONDE WHERE CI_auxiliar = CI_A;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1920,11 +1920,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarCrrMedico`(IN CI_M INT)
 BEGIN
 SELECT * FROM CORRESPONDE WHERE CI_medico = CI_M;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1939,11 +1939,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarFormulariosXNombre`(IN NOM_F VARCHAR(90))
 BEGIN
     SELECT * FROM formulario WHERE nombre LIKE concat('%',NOM_F,'%') LIMIT 0,6;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1958,7 +1958,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarMEDICOxAPELLIDO`(IN APELLIDO1 VARCHAR(30))
 BEGIN
     SELECT usuario.CI, usuario.nombre1,usuario.nombre2,
@@ -1967,7 +1967,7 @@ BEGIN
     usuario.activo,usuario_tel.telefono, medico_especialidad.especialidad
      FROM medico_especialidad,usuario,usuario_tel
     WHERE usuario.apellido1 LIKE concat('%',APELLIDO1,'%') AND usuario.CI = medico_especialidad.CI AND usuario_tel.CI = usuario.CI;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1982,7 +1982,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarMEDICOxCI`(IN cedula INT)
 BEGIN
     SELECT usuario.CI, usuario.nombre1,usuario.nombre2,
@@ -1991,7 +1991,7 @@ BEGIN
     usuario.activo,usuario_tel.telefono,medico_especialidad.especialidad
     FROM usuario,usuario_tel,medico_especialidad
     WHERE usuario.CI = cedula AND usuario_tel.CI = cedula AND medico_especialidad.CI = cedula AND usuario_tel.CI = cedula;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2006,13 +2006,13 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarMEDICOxEspecialidad`(IN ESP VARCHAR(50))
 BEGIN 
     SELECT u.CI,u.nombre1,u.nombre2,u.apellido1,u.apellido2, u.direccion_calle,u.direccion_nroPuerta,u.activo,u.correo, utel.telefono,me.especialidad
     FROM usuario u ,usuario_tel utel ,medico_especialidad me
 WHERE u.CI = utel.CI AND u.CI = me.CI AND me.especialidad LIKE CONCAT('%',ESP,'%');
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2027,7 +2027,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarPACIENTExAPELLIDO`(IN APELLIDO1 VARCHAR(30))
 BEGIN
     SELECT usuario.CI, usuario.nombre1,usuario.nombre2,
@@ -2037,7 +2037,7 @@ BEGIN
     paciente.e_civil,paciente.fecha_nac,paciente.sexo
     FROM paciente,usuario,usuario_tel
     WHERE usuario.apellido1 LIKE concat('%',APELLIDO1,'%') AND usuario.CI = paciente.CI AND usuario_tel.CI = usuario.CI;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2052,7 +2052,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarPACIENTExCI`(IN cedula INT)
 BEGIN
     SELECT usuario.CI, usuario.nombre1,usuario.nombre2,
@@ -2062,7 +2062,7 @@ BEGIN
     paciente.e_civil,paciente.fecha_nac,paciente.sexo
      FROM paciente,usuario,usuario_tel
     WHERE usuario.CI = cedula AND usuario_tel.CI = cedula AND paciente.CI = cedula;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2077,11 +2077,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarParametrosDeAnalisis`(IN ID_AN INT)
 BEGIN
 SELECT parametro.ID,parametro.nombre,parametro.unidad,parametro.referencia_min,parametro.referencia_max FROM parametro,tiene WHERE tiene.ID_analisis = ID_AN AND parametro.ID = tiene.ID_parametro;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2096,11 +2096,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarPregunta`(IN PREG VARCHAR(300))
 BEGIN
 SELECT ID FROM PREGUNTA where pregunta = PREG;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2115,11 +2115,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarRespuestas`(IN ID_C INT)
 BEGIN
 SELECT de.nombre_control_respuesta, respuesta FROM responde,de WHERE responde.ID_consulta = ID_C AND de.ID_pregunta = responde.ID_pregunta;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2134,12 +2134,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarRolUsuarioMYSQL`(IN USUARIO VARCHAR(50))
 BEGIN
     SELECT DEFAULT_ROLE_USER AS 'ROL' 
     FROM mysql.default_roles WHERE default_roles.USER = USUARIO;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2154,11 +2154,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarTratamientosXNombre`(IN NOM_T VARCHAR(160))
 BEGIN
     SELECT * FROM tratamiento WHERE nombre LIKE concat('%',NOM_T,'%') LIMIT 0,15;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2173,11 +2173,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CargarFechaResultadoA`(IN ID_C INT, IN ID_AN INT)
 BEGIN
 SELECT fecha from resultado WHERE ID_Consulta = ID_C AND ID_analisis = ID_AN;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2192,11 +2192,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CargarFormularioUsado`(IN ID_C INT)
 BEGIN
 SELECT xml FROM formulario WHERE ID IN (SELECT ID_formulario FROM responde WHERE responde.ID_consulta = ID_C);
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2211,11 +2211,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultaAnalisisResultados`(IN ID_C INT, IN ID_AN INT)
 BEGIN
 SELECT nombre,ID,unidad,referencia_min,referencia_max,valor FROM resultado,parametro WHERE ID_Consulta = ID_C AND ID_analisis = ID_AN AND resultado.ID_parametro = parametro.ID;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2230,11 +2230,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarActivo`(IN CI_U INT)
 BEGIN
 SELECT activo from usuario WHERE CI = CI_U;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2249,13 +2249,13 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarAnalisisRequerido`(IN ID_C INT)
 BEGIN
 SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 SELECT ID,nombre FROM requiere,analisis WHERE requiere.ID_consulta = ID_C AND requiere.ID_analisis = analisis.ID GROUP BY ID_consulta;
 SET sql_mode = @@GLOBAL.sql_mode;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2270,11 +2270,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarDiasSemana`(IN CI_P INT,IN ID_T INT,IN F_INI DATE)
 BEGIN
 SELECT dia from dia_semana WHERE CI_paciente = CI_P AND ID_tratamiento = ID_T AND fecha_inicio = F_INI;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2289,11 +2289,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarEnfermedadDeterminada`(IN ID_C INT)
 BEGIN
 SELECT nombre_enfermedad FROM determina WHERE determina.ID_consulta = ID_C LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2308,11 +2308,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarExamenFisico`(IN ID_C INT)
 BEGIN
 SELECT signo_clinico.nombre FROM signo_clinico,examenfisico WHERE examenfisico.ID_consulta = ID_C AND signo_clinico.ID = examenfisico.ID_signo;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2327,11 +2327,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarHistorialEstados`(IN CI_P INT)
 BEGIN
 SELECT nombre_e,fecha FROM registro_es WHERE CI_paciente=CI_P;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2346,11 +2346,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarHistorialTratamientos`(IN CI_P INT)
 BEGIN
 SELECT * from sigue,tratamiento WHERE CI_paciente = CI_P AND sigue.ID_tratamiento = tratamiento.ID;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2365,11 +2365,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarResultadoTratamiento`(IN ID_T INT, IN CI_P INT)
 BEGIN
     SELECT nombre,resultado FROM tratamiento,sigue WHERE sigue.ID_tratamiento = ID_T AND sigue.CI_paciente = CI_P AND tratamiento.ID = ID_T;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2384,11 +2384,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarSegDiario`(IN CI_P INT,IN ID_T INT,IN FEC_SEG DATE)
 BEGIN
 SELECT seguimiento.ID,seguimiento.descripcion from seguimiento,s_diario WHERE CI_paciente=CI_P AND ID_tratamiento = ID_T AND s_diario.fecha = FEC_SEG AND s_diario.ID_seg = seguimiento.ID;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2403,11 +2403,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarSintomasR`(IN ID_C INT)
 BEGIN
     SELECT sintoma.nombre FROM sintoma,registra WHERE registra.ID_consulta = ID_C AND sintoma.ID = registra.ID_sintoma;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2422,13 +2422,13 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarTratamientoSugerido`(IN ID_C INT)
 BEGIN
 SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 SELECT ID,nombre,descripcion FROM sugiere,tratamiento WHERE sugiere.ID_consulta = ID_C AND sugiere.ID_tratamiento = tratamiento.ID GROUP BY ID_Consulta;
 SET sql_mode = @@GLOBAL.sql_mode;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2443,11 +2443,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarUltimoEstado`(IN CI_P INT)
 BEGIN
 SELECT nombre_e,fecha FROM registro_es WHERE CI_paciente=CI_P ORDER BY fecha DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2462,11 +2462,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CRR_ROLE`()
 BEGIN
     SELECT CURRENT_ROLE();
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2481,11 +2481,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `FinalizarConsulta`(IN ID_C INT)
 BEGIN
     UPDATE Atiende SET activo = 0 WHERE ID_consulta = ID_C;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2500,13 +2500,13 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `LeerFotoUsuario`(IN cedula INT)
 BEGIN    
     SELECT foto
      FROM usuario
     WHERE usuario.CI = cedula;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2521,11 +2521,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ListadoAnalisisPaciente`(IN CI_P INT)
 BEGIN
 SELECT analisis.ID,analisis.nombre,requiere.ID_consulta,requiere.fecha_c,requiere.CI_paciente,requiere.CI_medico FROM analisis,requiere WHERE requiere.CI_paciente = CI_P AND requiere.ID_analisis = analisis.ID GROUP BY ID_consulta; 
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2540,11 +2540,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ListarParametros`()
 BEGIN
     SELECT * FROM parametro;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2559,7 +2559,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ModificarFormulario`(IN ID_F INT, IN NOMBRE VARCHAR(90), IN XML MEDIUMTEXT, IN V_PREVIA MEDIUMBLOB)
 BEGIN
 UPDATE formulario SET
@@ -2567,7 +2567,7 @@ UPDATE formulario SET
     xml = XML,
     v_previa = V_PREVIA
 WHERE formulario.ID = ID_F;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2582,12 +2582,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SugerirAnalisisSegunE`(IN ENF VARCHAR(160))
 BEGIN
 SELECT nombre, COUNT(*) from (SELECT nombre from analisis,requiere,determina WHERE 
 determina.nombre_enfermedad = ENF AND determina.ID_consulta = requiere.ID_consulta AND analisis.ID = requiere.ID_tratamiento GROUP BY requiere.ID_consulta) TopAnalisis ORDER BY COUNT(*) DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2602,11 +2602,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SugerirAnalisisSegunPyR`(IN ID_P INT, IN RES VARCHAR(7200))
 BEGIN
 SELECT nombre, COUNT(*) FROM (SELECT nombre from requiere,responde,analisis where responde.ID_pregunta = ID_P AND responde.respuesta =  RES AND requiere.ID_pregunta = responde.ID_pregunta AND analisis.ID = requiere.ID_analisis GROUP BY requiere.ID_consulta) TopAnalisis ORDER BY COUNT(*) DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2621,12 +2621,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SugerirAnalisisSegunS`(IN SIN VARCHAR(160))
 BEGIN
 SELECT nombrea, COUNT(*) FROM (SELECT analisis.nombre as 'nombrea' from registra,sintoma,requiere,analisis WHERE 
 requiere.ID_consulta = registra.ID_consulta AND registra.ID_sintoma = sintoma.ID AND sintoma.nombre = SIN AND requiere.ID_analisis = analisis.ID GROUP BY registra.ID_consulta) TopAnalisis ORDER BY COUNT(*) DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2641,12 +2641,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SugerirAnalisisSegunSC`(IN SIGNOC VARCHAR(160))
 BEGIN
 SELECT nombrea, COUNT(*) FROM (SELECT analisis.nombre as 'nombrea' from examenfisico,signo_clinico,requiere,analisis WHERE 
 requiere.ID_consulta = examenfisico.ID_consulta AND examenfisico.ID_signo = signo_clinico.ID AND signo_clinico.nombre = SIGNOC AND requiere.ID_analisis = analisis.ID GROUP BY examenfisico.ID_consulta) TopAnalisis ORDER BY COUNT(*) DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2661,11 +2661,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SugerirEnfermedadSegunPyR`(IN ID_P INT, IN RES VARCHAR(7200))
 BEGIN
 SELECT nombre_enfermedad, COUNT(*) FROM (SELECT nombre_enfermedad from determina,responde where responde.ID_pregunta = ID_P AND responde.respuesta = RES AND determina.ID_pregunta = responde.ID_pregunta GROUP BY determina.ID_consulta) TopEnfermedad ORDER BY COUNT(*) DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2680,12 +2680,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SugerirEnfermedadSegunS`(IN SIN VARCHAR(160))
 BEGIN
 SELECT nombre_enfermedad, COUNT(*) FROM (SELECT nombre_enfermedad from registra,sintoma,determina WHERE 
 determina.ID_consulta = registra.ID_consulta AND registra.ID_sintoma = sintoma.ID AND sintoma.nombre = SIN GROUP BY registra.ID_consulta) TopEnfermedad ORDER BY COUNT(*) DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2700,12 +2700,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SugerirEnfermedadSegunSC`(IN SIGNOC VARCHAR(160))
 BEGIN
 SELECT nombre_enfermedad, COUNT(*) FROM (SELECT nombre_enfermedad from examenfisico,signo_clinico,determina WHERE 
 determina.ID_consulta = examenfisico.ID_consulta AND examenfisico.ID_signo = signo_clinico.ID AND signo_clinico.nombre = SIGNOC GROUP BY examenfisico.ID_consulta) TopEnfermedad ORDER BY COUNT(*) DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2720,11 +2720,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SugerirTratamientoPyR`(IN ID_P INT, IN RES VARCHAR(7200))
 BEGIN
 SELECT nombre, COUNT(*) FROM (SELECT nombre from sugiere,responde,tratamiento where responde.ID_pregunta = ID_P AND responde.respuesta = RES AND sugiere.ID_pregunta = responde.ID_pregunta AND tratamiento.ID = sugiere.ID_analisis GROUP BY sugiere.ID_consulta) TopTratamiento ORDER BY COUNT(*) DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2739,12 +2739,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SugerirTratamientoSegunE`(IN ENF VARCHAR(160))
 BEGIN
 SELECT nombre, COUNT(*) from (SELECT nombre from tratamiento,sugiere,determina WHERE 
 determina.nombre_enfermedad = ENF AND determina.ID_consulta = sugiere.ID_consulta AND tratamiento.ID = sugiere.ID_tratamiento GROUP BY sugiere.ID_consulta) TopTratamiento ORDER BY COUNT(*) DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2759,12 +2759,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SugerirTratamientoSegunS`(IN SIN VARCHAR(160))
 BEGIN
 SELECT nombret, COUNT(*) FROM (SELECT tratamiento.nombre as 'nombret' from registra,sintoma,sugiere,tratamiento WHERE 
 sugiere.ID_consulta = registra.ID_consulta AND registra.ID_sintoma = sintoma.ID AND sintoma.nombre = SIN AND sugiere.ID_tratamiento = tratamiento.ID GROUP BY registra.ID_consulta) TopTratamiento ORDER BY COUNT(*) DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2779,12 +2779,12 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SugerirTratamientoSegunSC`(IN SIGNOC VARCHAR(160))
 BEGIN
 SELECT nombret, COUNT(*) FROM (SELECT tratamiento.nombre as 'nombret' from examenfisico,signo_clinico,sugiere,tratamiento WHERE 
 sugiere.ID_consulta = examenfisico.ID_consulta AND examenfisico.ID_signo = signo_clinico.ID AND signo_clinico.nombre = SIGNOC AND sugiere.ID_tratamiento = tratamiento.ID GROUP BY examenfisico.ID_consulta) TopTratamiento ORDER BY COUNT(*) DESC LIMIT 1;
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -2799,11 +2799,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = cp850_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `USUARIOEXISTE`(IN CEDULA INT,OUT EXISTE BIT)
 BEGIN
     SET EXISTE = (EXISTS(SELECT 1 FROM USUARIO WHERE CI=CEDULA));
-END ;;
+END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
