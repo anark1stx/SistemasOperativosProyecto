@@ -1785,9 +1785,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaUsuarioMYSQL`(
     IN CONTRASENA VARCHAR(30),
     IN ROL VARCHAR(30))
 BEGIN
-SET @dropexists = concat('DROP USER IF EXISTS ', USUARIO, '@', 'localhost',';');
+SET @dropexists = concat('DROP USER IF EXISTS ', USUARIO,'@\'%\'',';');
     PREPARE dropUser FROM @dropexists;
-    EXECUTE dropUser;SET @alta = concat('CREATE USER ', USUARIO, '@', 'localhost', ' IDENTIFIED BY ''', CONTRASENA, '''',';');
+    EXECUTE dropUser;SET @alta = concat('CREATE USER ', USUARIO, '@\'%\'', ' IDENTIFIED BY ''', CONTRASENA, '''',';');
     PREPARE createUser FROM @alta;
     EXECUTE createUser;
 SET @grant_rol = concat('GRANT ' , ROL, ' TO ', USUARIO,'@\'%\'',';');
