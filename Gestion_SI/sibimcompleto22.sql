@@ -20,7 +20,7 @@
 CREATE ROLE IF NOT EXISTS 'administrador';
 GRANT ALL PRIVILEGES ON *.* TO 'administrador';
 GRANT EXECUTE ON *.* TO 'administrador';
-CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY 'overcl0de-4DM';
+CREATE USER IF NOT EXISTS 'admin'@'%' IDENTIFIED BY 'overcl0de-4DM';
 SET DEFAULT ROLE 'administrador' FOR 'admin'@'%';
 GRANT 'administrador' TO 'admin'@'%';
 CREATE ROLE IF NOT EXISTS 'medico';
