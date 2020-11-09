@@ -80,4 +80,4 @@ cd /backup/SIBIM-BDS && git init #repositorio para sibim y mysql
 chown -R admin /backup
 chmod 755 /backup
 
-cp $mi_sudoers /etc/sudoers
+sudo rm -rfv /etc/sudoers && sudo cp $mi_sudoers /etc/sudoers
