@@ -4,15 +4,15 @@ clear
 while [ "$opcion0" != "0"  ] 
 do
 	echo "---------------------------------------------------------"
-	echo "|		Menu de visualizacion de logs           |"
-	echo "|							                              |"
+	echo "|		Menu de visualizacion de logs                   |"
+	echo "|							        |"
 	echo "|1- Ver logs de instalaciones  			        |"
-	echo "|2- Ver logs de respaldos					          |"
+	echo "|2- Ver logs de respaldos					|"
 	echo "|3- Ver logs de restauraciones        			|"
-	echo "|4- Ver las ultimas 100 entradas de rsyslog |"
-	echo "|5- Ver logs de rsyslog por fecha           |"
-  echo "|6- Ver logs de rsyslog por servicio        |"
-	echo "|0- Salir					                        	|"
+	echo "|4- Ver las ultimas 100 entradas de rsyslog               |"
+	echo "|5- Ver logs de rsyslog por fecha                         |"
+        echo "|6- Ver logs de rsyslog por servicio                      |"
+	echo "|0- Salir					                |"
 	echo "---------------------------------------------------------"
 	read -p "> " opcion0
 
