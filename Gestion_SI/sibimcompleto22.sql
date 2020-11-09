@@ -995,7 +995,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAnalisisIndicacion`(IN NOM VARCHAR(90))
 BEGIN
-    INSERT INTO indicacion(nombre) SELECT NOM WHERE NOT EXISTS(SELECT nombre FROM indicacion WHERE nombre=NOM) LIMIT 1;
+    INSERT INTO indicacion(nombre) SELECT NOM ON DUPLICATE KEY UPDATE nombre=NOM;
 END; 
 //
 DELIMITER ;
@@ -1113,7 +1113,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAuxiliar`(IN cedula INT)
 BEGIN
-INSERT INTO auxiliar (CI) SELECT cedula WHERE NOT EXISTS(SELECT 1 FROM auxiliar WHERE CI = cedula);
+INSERT INTO auxiliar (CI) SELECT cedula ON DUPLICATE KEY UPDATE CI = cedula;
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1132,7 +1132,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAux_c_med`(IN CI_M INT, IN CI_A INT, IN FEC DATETIME)
 BEGIN
-INSERT INTO corresponde(CI_medico,CI_auxiliar,fecha) SELECT CI_M,CI_A,FEC WHERE NOT EXISTS(SELECT 1 FROM corresponde WHERE CI_medico = CI_M AND CI_auxiliar=CI_A AND fecha = FEC);
+INSERT INTO corresponde(CI_medico,CI_auxiliar,fecha) SELECT CI_M,CI_A,FEC ON DUPLICATE KEY UPDATE CI_medico=CI_M, Ci_auxiliar=CI_A, fecha=FEC;
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1189,7 +1189,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaEnfermedad`(IN NOM VARCHAR (160))
 BEGIN
-INSERT INTO enfermedad(nombre) SELECT NOM WHERE NOT EXISTS(SELECT 1 FROM ENFERMEDAD WHERE NOMBRE = NOM) LIMIT 1;
+INSERT INTO enfermedad(nombre) SELECT NOM ON DUPLICATE KEY UPDATE nombre=NOM;
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1228,7 +1228,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaEstado`(IN NOM VARCHAR(90))
 BEGIN
-    INSERT INTO estado(nombre) SELECT NOM WHERE NOT EXISTS(SELECT 1 FROM estado WHERE nombre=NOM) LIMIT 1;
+    INSERT INTO estado(nombre) SELECT NOM ON DUPLICATE KEY UPDATE nombre=NOM;
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1286,7 +1286,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaMedico`(IN cedula INT)
 BEGIN
-INSERT INTO medico (CI) SELECT cedula WHERE NOT EXISTS(SELECT 1 FROM medico WHERE CI = cedula);
+INSERT INTO medico (CI) SELECT cedula ON DUPLICATE KEY UPDATE CI = cedula;
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1383,7 +1383,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaPregunta`(IN PREG VARCHAR(300), OUT ID_P INT)
 BEGIN
-    INSERT INTO pregunta(pregunta) SELECT PREG WHERE NOT EXISTS(SELECT 1 from pregunta where pregunta=PREG) LIMIT 1;
+    INSERT INTO pregunta(pregunta) SELECT PREG ON DUPLICATE KEY UPDATE pregunta=PREG;
     SET ID_P = (SELECT ID FROM pregunta where pregunta=PREG);
 END; //
 DELIMITER ;
@@ -1518,7 +1518,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaSignoClinico`(IN NOM VARCHAR (160), OUT ID_SC INT)
 BEGIN
-INSERT INTO signo_clinico(nombre) SELECT NOM WHERE NOT EXISTS(SELECT 1 FROM signo_clinico where nombre=NOM) LIMIT 1;
+INSERT INTO signo_clinico(nombre) SELECT NOM ON DUPLICATE KEY UPDATE nombre=NOM;
 SELECT ID FROM signo_clinico WHERE nombre = NOM INTO ID_SC;
 END; //
 DELIMITER ;
@@ -1538,7 +1538,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaSintoma`(IN NOM VARCHAR (160), OUT ID_S INT)
 BEGIN
-INSERT INTO sintoma(nombre) SELECT NOM WHERE NOT EXISTS(SELECT 1 FROM sintoma where nombre=NOM) LIMIT 1;
+INSERT INTO sintoma(nombre) SELECT NOM ON DUPLICATE KEY UPDATE nombre=NOM;
 SELECT ID FROM sintoma WHERE nombre = NOM INTO ID_S;
 END; //
 DELIMITER ;
