@@ -148,8 +148,5 @@ crontab -u root /var/mis_rutinas
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux
 
-#ya que copie la clave ssh deshabilito el ingreso con contraseña en ese servidor
-echo "Desactivando autenticacion con usuario y contrasena en servidor de respaldos."
-
 # por ultimo creo la base de datos, roles, usuarios, procedimientos y poblo con los datos q deje precargados
 mysql -u root -p$adminpwd < sibimcompleto.sql && echo "Bases de datos mysql y sibim instaladas e inicializadas con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo un error creando las bases de datos" >> /logs/resultados_scripts.log ; exit) 
