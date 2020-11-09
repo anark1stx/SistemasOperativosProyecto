@@ -112,7 +112,7 @@ chkconfig mysql on
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
 #genero clave ssh, 
-su admin -c "yes '' | ssh-keygen -N '' >&- 2>&-"
+su admin -c "yes '' | ssh-keygen -f -N '' >&- 2>&-"
 #automatizo copiado de clave SSH, por defecto el servidor de respaldos tiene permitido el ingreso de usuarios con contraseña, al final del script me conecto y desactivo eso en dicho servidor.
 copiar_id=$(sshpass -p$adminpwd ssh-copy-id -i /home/admin/.ssh/id_rsa.pub "-p 49555 admin@192.168.0.5" | grep "denied\|ERROR") #sshpass permite pasar la contrasena del usuario a ssh por stdin
 
