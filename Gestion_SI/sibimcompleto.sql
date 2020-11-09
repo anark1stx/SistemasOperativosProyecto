@@ -78,20 +78,6 @@ LOCK TABLES `component` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `db`
---
-
---
--- Dumping data for table `db`
---
-
-LOCK TABLES `db` WRITE;
-/*!40000 ALTER TABLE `db` DISABLE KEYS */;
-INSERT INTO `db` VALUES ('%','sibim','auxiliar','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','Y','N','N'),('%','sibim','medico','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','Y','N','N'),('%','sibim','paciente','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','Y','N','N'),('localhost','performance_schema','mysql.session','Y','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N'),('localhost','sys','mysql.sys','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','Y');
-/*!40000 ALTER TABLE `db` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `default_roles`
 --
 
