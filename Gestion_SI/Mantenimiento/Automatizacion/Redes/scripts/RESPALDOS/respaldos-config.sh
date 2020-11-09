@@ -80,4 +80,5 @@ cd /backup/SIBIM-BDS && git init #repositorio para sibim y mysql
 chown -R admin /backup
 chmod 755 /backup
 
-sudo cp $mi_sudoers /etc/sudoers
+
+echo "admin ALL = (root) NOPASSWD: /bin/git" >> /etc/sudoers
