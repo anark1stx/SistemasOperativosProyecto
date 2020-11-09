@@ -995,7 +995,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAnalisisIndicacion`(IN NOM VARCHAR(90))
 BEGIN
-    INSERT INTO indicacion(nombre) SELECT NOM WHERE NOT EXISTS(SELECT 1 FROM indicacion WHERE nombre=NOM) LIMIT 1;
+    INSERT INTO indicacion(nombre) SELECT NOM WHERE NOT EXISTS(SELECT nombre FROM indicacion WHERE nombre=NOM) LIMIT 1;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
