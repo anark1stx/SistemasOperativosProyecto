@@ -69,7 +69,7 @@ echo 'gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB'
 echo 'gpgcheck=1'
 } > /etc/yum.repos.d/mariadb.org.repo
 
-yum install -y MariaDB-server && echo "Mysql instalado con exito"
+yum install -y MariaDB-server && echo "Mysql instalado con exito" ; service mysql start
 
 mysql_status=$(service mysql status | grep "ERROR")
 
