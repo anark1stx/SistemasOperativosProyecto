@@ -16,12 +16,12 @@ do
 	case "$opcionx" in 
 		"1")
 			clear
-			./Mantenimiento/Respaldar/respaldar_linux.sh
+			./Mantenimiento/Respaldar/Linux/respaldar.sh
 			;;
 
 		"2")
 			clear
-			./Mantenimiento/Respaldar/respaldar_mysql.sh
+			./Mantenimiento/Respaldar/MySQL/respaldar.sh
 			;;
 		"0")
 			clear
