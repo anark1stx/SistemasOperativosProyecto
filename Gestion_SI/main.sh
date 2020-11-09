@@ -14,10 +14,11 @@ do
 	echo "---------------------------------------------------------"
 	echo "|		Menu de Gestion SIBIM 			|"
 	echo "|							|"
-	echo "|1- Gestionar usuarios y grupos				|"
+	echo "|1- Gestionar usuarios y grupos			|"
 	echo "|2- Mantenimiento					|"
-	echo "|3- Configurar servidor(es)				|"
-	echo "|4- Agregar y configurar usuarios de proyecto		|"
+	echo "|3- Configurar servidor(es)			|"
+	echo "|4- Agregar y configurar usuarios de proyecto	|"
+	echo "|5- Configurar mysql manualmente			|"
 	echo "|0- Salir						|"
 	echo "---------------------------------------------------------"
 	read -p "> " opcion0
@@ -39,6 +40,16 @@ do
 		"4")
 			clear
 			./Mantenimiento/Automatizacion/UsuariosYGrupos/main.sh
+			;;
+		"4")
+			clear
+			mysql_instalado=$(yum list installed | grep mysql)
+			if  [ -n "$mysql_instalado" ] ; then
+				echo "Si ejecuto el script de automatizacion del servidor, la contrasena del usuario root es la misma que la del usuario admin."
+				mysql_secure_installation
+			else
+				echo "mysql no esta instalado, instalelo primero"
+			fi
 			;;
 		"0")
 			clear
