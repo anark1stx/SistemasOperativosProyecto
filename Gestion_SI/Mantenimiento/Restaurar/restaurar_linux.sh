@@ -7,4 +7,6 @@ read -p "Ingrese los primeros 6 digitos del SHA del commit que desea respaldar: 
 echo "Copiando el repositorio." ; rsync -e "ssh -i /home/admin/.ssh/id_rsa -p 49555" -chavzp admin@192.168.0.5:/backup/Linux /var && echo "Repositorio copiado con exito" || (echo "hubo errores copiando el repositorio." ; exit)
 echo "SHA seleccionado fue: $sha, restaurandolo." ; cd /var/Linux && git reset --hard $sha && echo "Repositorio restaurado a la version indicada" || (echo "Hubo errores restaurando el repositorio" ; exit)
 cd /var #me muevo a var para no tener problemas al sobreescribir home
-mv home /home && echo "Directorio home respaldado con exito" || "Hubo errores al sobreescribir el directorio home" ; rm -rf /var/Linux
+cp -R home /home && echo "Directorio home respaldado con exito" || "Hubo errores al sobreescribir el directorio home"
+cp -R etc /etc && echo "Directorio etc respaldado con exito" || "Hubo errores al sobreescribir el directorio etc"
+rm -rf /var/Linux
