@@ -995,7 +995,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAnalisisIndicacion`(IN NOM VARCHAR(90))
 BEGIN
-    INSERT INTO indicacion(nombre) SELECT NOM ON DUPLICATE KEY UPDATE nombre=NOM;
+    INSERT INTO indicacion(nombre) SELECT NOM AS INNAME FROM DUAL WHERE NOT EXISTS(SELECT nombre from indicacion where nombre=NOM LIMIT 1);
 END; 
 //
 DELIMITER ;
@@ -1074,7 +1074,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAnalisisTieneParametro`(IN ID_AN INT,IN ID_P INT)
 BEGIN
-    INSERT INTO tiene(ID_analisis,ID_parametro)  VALUES(ID_AN,ID_P);
+    INSERT INTO tiene(ID_analisis,ID_parametro) VALUES (ID_AN,ID_P);
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1113,7 +1113,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAuxiliar`(IN cedula INT)
 BEGIN
-INSERT INTO auxiliar (CI) SELECT cedula ON DUPLICATE KEY UPDATE CI = cedula;
+INSERT INTO auxiliar (CI) SELECT cedula AS INNAME FROM DUAL WHERE NOT EXISTS(SELECT CI FROM AUXILIAR WHERE CI = cedula LIMIT 1);
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1132,7 +1132,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAux_c_med`(IN CI_M INT, IN CI_A INT, IN FEC DATETIME)
 BEGIN
-INSERT INTO corresponde(CI_medico,CI_auxiliar,fecha) SELECT CI_M,CI_A,FEC ON DUPLICATE KEY UPDATE CI_medico=CI_M, Ci_auxiliar=CI_A, fecha=FEC;
+INSERT INTO corresponde(CI_medico,CI_auxiliar,fecha) SELECT CI_M,CI_A,FEC AS INNAME FROM DUAL WHERE NOT EXISTS( SELECT CI_medico,CI_auxiliar,fecha WHERE CI_medico=CI_M AND CI_auxiliar=CI_A AND fecha=FEC LIMIT 1);
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1189,7 +1189,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaEnfermedad`(IN NOM VARCHAR (160))
 BEGIN
-INSERT INTO enfermedad(nombre) SELECT NOM ON DUPLICATE KEY UPDATE nombre=NOM;
+INSERT INTO enfermedad(nombre) SELECT NOM AS INNAME FROM DUAL WHERE NOT EXISTS(SELECT nombre from enfermedad where nombre=NOM LIMIT 1);
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1208,8 +1208,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaEspecificacion`(IN ID_AN INT,IN NOM_I VARCHAR(90), IN DESCR VARCHAR(500))
 BEGIN
-    INSERT INTO especificacion(ID_analisis,nombre_indicacion,descripcion) 
-    VALUES(ID_AN,NOM_I,DESCR);
+    INSERT INTO especificacion(ID_analisis,nombre_indicacion,descripcion) VALUES(ID_AN,NOM_I,DESCR);
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1228,7 +1227,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaEstado`(IN NOM VARCHAR(90))
 BEGIN
-    INSERT INTO estado(nombre) SELECT NOM ON DUPLICATE KEY UPDATE nombre=NOM;
+    INSERT INTO estado(nombre) SELECT NOM AS INNAME FROM DUAL WHERE NOT EXISTS(SELECT nombre from estado where nombre=NOM LIMIT 1);
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1286,7 +1285,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaMedico`(IN cedula INT)
 BEGIN
-INSERT INTO medico (CI) SELECT cedula ON DUPLICATE KEY UPDATE CI = cedula;
+INSERT INTO medico (CI) SELECT cedula AS INNAME FROM DUAL WHERE NOT EXISTS(SELECT CI FROM MEDICO WHERE CI = cedula LIMIT 1);
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1383,7 +1382,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaPregunta`(IN PREG VARCHAR(300), OUT ID_P INT)
 BEGIN
-    INSERT INTO pregunta(pregunta) SELECT PREG ON DUPLICATE KEY UPDATE pregunta=PREG;
+    INSERT INTO pregunta(pregunta) SELECT PREG AS INNAME FROM DUAL WHERE NOT EXISTS(SELECT pregunta from pregunta where pregunta=PREG LIMIT 1);
     SET ID_P = (SELECT ID FROM pregunta where pregunta=PREG);
 END; //
 DELIMITER ;
@@ -1518,7 +1517,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaSignoClinico`(IN NOM VARCHAR (160), OUT ID_SC INT)
 BEGIN
-INSERT INTO signo_clinico(nombre) SELECT NOM ON DUPLICATE KEY UPDATE nombre=NOM;
+INSERT INTO signo_clinico(nombre) SELECT NOM AS INNAME FROM DUAL WHERE NOT EXISTS(SELECT nombre from signo_clinico WHERE nombre=NOM LIMIT 1);
 SELECT ID FROM signo_clinico WHERE nombre = NOM INTO ID_SC;
 END; //
 DELIMITER ;
@@ -1538,7 +1537,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaSintoma`(IN NOM VARCHAR (160), OUT ID_S INT)
 BEGIN
-INSERT INTO sintoma(nombre) SELECT NOM ON DUPLICATE KEY UPDATE nombre=NOM;
+INSERT INTO sintoma(nombre) SELECT AS INNAME FROM DUAL WHERE NOT EXISTS(SELECT nombre from sintoma where nombre=NOM LIMIT 1);
 SELECT ID FROM sintoma WHERE nombre = NOM INTO ID_S;
 END; //
 DELIMITER ;
@@ -1596,7 +1595,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaUsuario`(IN cedula INT,IN NOM1 varchar(30),IN NOM2 varchar(30),IN AP1 varchar(30),IN AP2 varchar(30),IN DIR_C varchar(160), IN DIR_N INT,IN ACT BIT, IN CORR varchar(50), IN FOTO MEDIUMBLOB)
 BEGIN
-INSERT INTO Usuario (CI,nombre1,nombre2,apellido1,apellido2,direccion_calle,direccion_nroPuerta,activo,correo,foto) VALUES (cedula,NOM1,NOM2,AP1,AP2,DIR_C,DIR_N,ACT,CORR,FOTO) ON DUPLICATE KEY UPDATE nombre1 = NOM1, nombre2 = NOM2, apellido1 = AP1, apellido2 = AP2, direccion_calle = DIR_C, direccion_nroPuerta = DIR_N, activo = ACT, correo = CORR, foto = FOTO;
+INSERT INTO usuario (CI,nombre1,nombre2,apellido1,apellido2,direccion_calle,direccion_nroPuerta,activo,correo,foto) VALUES (cedula,NOM1,NOM2,AP1,AP2,DIR_C,DIR_N,ACT,CORR,FOTO) ON DUPLICATE KEY UPDATE nombre1 = NOM1, nombre2 = NOM2, apellido1 = AP1, apellido2 = AP2, direccion_calle = DIR_C, direccion_nroPuerta = DIR_N, activo = ACT, correo = CORR, foto = FOTO;
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2451,25 +2450,6 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsultarUltimoEstado`(IN CI_P INT)
 BEGIN
 SELECT nombre_e,fecha FROM registro_es WHERE CI_paciente=CI_P ORDER BY fecha DESC LIMIT 1;
-END; //
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `CRR_ROLE` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = cp850 */ ;
-/*!50003 SET character_set_results = cp850 */ ;
-/*!50003 SET collation_connection  = cp850_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CRR_ROLE`()
-BEGIN
-    SELECT CURRENT_ROLE();
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
