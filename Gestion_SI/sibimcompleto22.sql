@@ -1132,7 +1132,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AltaAux_c_med`(IN CI_M INT, IN CI_A INT, IN FEC DATETIME)
 BEGIN
-INSERT INTO corresponde(CI_medico,CI_auxiliar,fecha) SELECT CI_M,CI_A,FEC AS INNAME FROM DUAL WHERE NOT EXISTS( SELECT CI_medico,CI_auxiliar,fecha WHERE CI_medico=CI_M AND CI_auxiliar=CI_A AND fecha=FEC LIMIT 1);
+INSERT INTO corresponde(CI_medico,CI_auxiliar,fecha) SELECT CI_M,CI_A,FEC AS INNAME FROM DUAL WHERE NOT EXISTS(SELECT CI_medico,CI_auxiliar,fecha FROM corresponde WHERE CI_medico=CI_M AND CI_auxiliar=CI_A AND fecha=FEC LIMIT 1);
 END; //
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
