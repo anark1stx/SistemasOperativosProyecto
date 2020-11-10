@@ -113,6 +113,7 @@ chkconfig rsyslog on
 chkconfig sshd on
 chkconfig httpd on
 chkconfig mysql on
+chkconfig iptables on
 
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
@@ -135,10 +136,9 @@ iptables -A INPUT -p tcp --destination-port 22 -j DROP
 iptables -A INPUT -p tcp -m tcp --dport 49555 -j ACCEPT
 iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
 iptables -A INPUT -p tcp -m tcp --dport 3306 -j ACCEPT
-
 service sshd restart
 
-iptables-save
+service iptables save
 
 #este archivo guarda las credenciales y cada vez que efectuo mysqldump no tengo que especificar contrasena.
 cp .my.cnf /home/admin/.my.cnf
