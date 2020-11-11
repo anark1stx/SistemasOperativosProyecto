@@ -64,7 +64,7 @@ systemctl enable firewalld
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
 #genero clave ssh, 
-su admin -c "yes '' | ssh-keygen -N '' >&- 2>&-"
+yes '' | ssh-keygen -N '' >&- 2>&-
 
 cat $mi_ssh > /etc/ssh/sshd_config
 sudo firewall-cmd --add-port=49555/tcp --permanent
@@ -77,8 +77,6 @@ mkdir -p /backup/SIBIM-BDS
 mkdir -p /backup/Linux
 cd /backup/Linux && git init #repositorio con archivos del sistema, /etc, /home
 cd /backup/SIBIM-BDS && git init #repositorio para sibim y mysql
-chown -R admin /backup
 chmod 755 /backup
-
 
 echo "admin ALL = (root) NOPASSWD: /bin/git" >> /etc/sudoers
