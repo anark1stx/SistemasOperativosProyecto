@@ -118,8 +118,8 @@ chkconfig iptables on
 sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabilitar SELinux para poder usar rsync sin problemas
 
 #genero clave ssh, 
-su admin -c "yes '' | ssh-keygen -N '' >&- 2>&-"
-copiar_id=$(sshpass -p$adminpwd ssh-copy-id -i /home/admin/.ssh/id_rsa.pub "-p 49555 admin@192.168.0.5" | grep "denied\|ERROR") #sshpass permite pasar la contrasena del usuario a ssh por stdin
+yes '' | ssh-keygen -N '' >&- 2>&-
+copiar_id=$(sshpass -p$adminpwd ssh-copy-id -i /root/.ssh/id_rsa.pub "-p 49555 root@192.168.0.5" | grep "denied\|ERROR") #sshpass permite pasar la contrasena del usuario a ssh por stdin
 
 if [[ -n "$copiar_id"  ]]; then
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): No se pudo establecer comunicacion con el servidor de respaldos, verifique que este encendido y que haya sido configurado." >> /logs/resultados_scripts.log ; exit
@@ -139,11 +139,6 @@ iptables -A INPUT -p tcp -m tcp --dport 3306 -j ACCEPT
 service sshd restart
 
 service iptables save
-
-#este archivo guarda las credenciales y cada vez que efectuo mysqldump no tengo que especificar contrasena.
-cp .my.cnf /home/admin/.my.cnf
-chown admin /home/admin/.my.cnf
-chmod 600 /home/admin/.my.cnf
 
 #copio todos los scripts al directorio acordado
 cp -R Mantenimiento/Automatizacion/scripts_cron /var/
