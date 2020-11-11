@@ -7,6 +7,6 @@ read -p "Ingrese los primeros 6 digitos del SHA del commit que desea respaldar: 
 echo "Copiando el repositorio." ; rsync -e "ssh -i /home/admin/.ssh/id_rsa -p 49555" -chavzp admin@192.168.0.5:/backup/Linux /var &>/dev/null && echo "Repositorio copiado con exito" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): hubo errores copiando el repositorio." >> /logs/restauraciones.log ; exit)
 echo "SHA seleccionado fue: $sha, restaurandolo." ; cd /var/Linux && git reset --hard $sha && echo "Repositorio restaurado a la version indicada" || (echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores restaurando el repositorio" >> /logs/restauraciones.log ; exit)
 cd /var #me muevo a var para no tener problemas al sobreescribir home
-cp -R /var/Linux/home / && echo echo "$(date '+%d/%m/%Y %H:%M:%S'): Restaurando Linux" >> /logs/restauraciones.log || echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores al sobreescribir el directorio home" >> /logs/respaldos.log
-cp -R /var/Linux/etc / && echo "$(date '+%d/%m/%Y %H:%M:%S'): Directorio etc restaurado con exito" >> /logs/restauraciones.log || echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores al sobreescribir el directorio etc" >> /logs/respaldos.log
+cp -R /var/Linux/home / && echo echo "$(date '+%d/%m/%Y %H:%M:%S'): Restaurando Linux" >> /logs/restauraciones.log || echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores al sobreescribir el directorio home" >> /logs/restauraciones.log
+cp -R /var/Linux/etc / && echo "$(date '+%d/%m/%Y %H:%M:%S'): Directorio etc restaurado con exito" >> /logs/restauraciones.log || echo "$(date '+%d/%m/%Y %H:%M:%S'): Hubo errores al sobreescribir el directorio etc" >> /logs/restauraciones.log
 rm -rf /var/Linux
