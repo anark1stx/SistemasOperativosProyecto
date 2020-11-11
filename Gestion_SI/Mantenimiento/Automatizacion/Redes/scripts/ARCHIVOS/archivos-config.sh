@@ -119,7 +119,7 @@ sed -i "/SELINUX=enforcing/c SELINUX=disabled" /etc/sysconfig/selinux  #deshabil
 
 #genero clave ssh, 
 yes '' | ssh-keygen -N '' >&- 2>&-
-copiar_id=$(sshpass -p$adminpwd ssh-copy-id -i /root/.ssh/id_rsa.pub "-p 49555 root@192.168.0.5" | grep "denied\|ERROR") #sshpass permite pasar la contrasena del usuario a ssh por stdin
+copiar_id=$(sshpass -p$adminpwd ssh-copy-id "-p 49555 root@192.168.0.5" | grep "denied\|ERROR") #sshpass permite pasar la contrasena del usuario a ssh por stdin
 
 if [[ -n "$copiar_id"  ]]; then
 	echo "$(date '+%d/%m/%Y %H:%M:%S'): No se pudo establecer comunicacion con el servidor de respaldos, verifique que este encendido y que haya sido configurado." >> /logs/resultados_scripts.log ; exit
